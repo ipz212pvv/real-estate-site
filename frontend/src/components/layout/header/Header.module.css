@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(5,5,5,0.06);
+    padding: 0;
+}
+
+.menu-desktop {
+    flex: 1;
+    min-width: 0;
+    border: none
+}
+
+.drawer-header button {
+    order: 2;
+    margin-inline-end: 0 !important;
+}

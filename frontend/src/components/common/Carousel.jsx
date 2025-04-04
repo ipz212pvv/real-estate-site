@@ -1,0 +1,12 @@
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+export function Carousel({ children, ...props }) {
+  return (
+    <Slider {...props}>
+      {children}
+    </Slider>
+  );
+}

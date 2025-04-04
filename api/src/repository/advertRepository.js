@@ -1,0 +1,187 @@
+const { models } = require('../models');
+const userRepository = require("./userRepository");
+const locationRepository = require("./locationRepository");
+const { Advert ,AdvertType} = models;
+const { getAdvertCommentInclude,getUserInclude,getLocationInclude,getAdvertTypeInclude ,getAdvertImageInclude,getAdvertBenefitsInclude, getAdvertNearbyPlacesInclude} = require('./../utils/include');
+const FileService = require('../services/FileService');
+const {getUsdToUahRate,calculatePrice} = require("../services/RateFetcherService");
+const { Op } = require("sequelize");
+const { isExistData } = require("../utils/isExist");
+
+const include =  [
+    getUserInclude("userOfAdvert"),
+    getLocationInclude("locationForAdvert"),
+    getAdvertTypeInclude(),
+    getAdvertImageInclude(),
+    getAdvertBenefitsInclude(),
+    getAdvertNearbyPlacesInclude()
+];
+
+const updateAdvertImages = async (adverts) => {
+    for (const advert of adverts) {
+        for (const advertImage of advert.advertImages) {
+            advertImage.imageUrl = await FileService.getAdvertImage(advertImage.imageUrl);
+        }
+        if (advert.userOfAdvert && advert.userOfAdvert.image) {
+            advert.userOfAdvert.image = await FileService.getUserImage(advert.userOfAdvert.id);
+        }
+        if (advert.advertComments){
+            for (const comment of advert.advertComments) {
+                if (comment.userForComment && comment.userForComment.image) {
+                    comment.userForComment.image = await FileService.getUserImage(comment.userForComment.id);
+                }
+            }
+        }
+    }
+};
+
+const getSearchedAdverts = async (query) => {
+    try {
+        const { typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
+        let where = {};
+
+        if (typeId) where.typeId = typeId;
+
+        if (minPriceUah || maxPriceUah) {
+            where.price_uah = { ...(where.price_uah || {}) };
+            if (minPriceUah) where.price_uah[Op.gte] = parseFloat(minPriceUah);
+            if (maxPriceUah) where.price_uah[Op.lte] = parseFloat(maxPriceUah);
+        }
+
+        if (minPriceUsd || maxPriceUsd) {
+            where.price_usd = { ...(where.price_usd || {}) };
+            if (minPriceUsd) where.price_usd[Op.gte] = parseFloat(minPriceUsd);
+            if (maxPriceUsd) where.price_usd[Op.lte] = parseFloat(maxPriceUsd);
+        }
+
+        if (city) where["$locationForAdvert.city$"] = { [Op.like]: `${city}%` };
+        if (country) where["$locationForAdvert.country$"] = { [Op.like]: `${country}%` };
+
+        if (minArea || maxArea) {
+            where.area = { ...(where.area || {}) };
+            if (minArea) where.area[Op.gte] = parseFloat(minArea);
+            if (maxArea) where.area[Op.lte] = parseFloat(maxArea);
+        }
+
+        if (benefits) {
+            const benefitsArray = Array.isArray(benefits) ? benefits : benefits.split(',');
+            where["$advertBenefitsForAdvert.benefitId$"] = { [Op.in]: benefitsArray.map(id => parseInt(id)) };
+        }
+
+        return  await getAllAdverts(where);
+
+    } catch (error) {
+        throw new Error('Не вдалося отримати оголошення: ' + error.message);
+    }
+};
+
+const getAllAdverts = async (where = {}) => {
+    try {
+        const adverts = await Advert.findAll({
+            where,
+            include: include,
+        });
+        await updateAdvertImages(adverts);
+        return adverts;
+    } catch (error) {
+        throw new Error('Не вдалося отримати оголошення: ' + error.message);
+    }
+};
+
+const getAdvertById = async (id) => {
+    try {
+        const advert = await Advert.findByPk(id, {
+            include: [...include, getAdvertCommentInclude()],
+        });
+
+        if (!advert) {
+            throw new Error('Оголошення не знайдено');
+        }
+        await updateAdvertImages([advert]);
+        return advert;
+    } catch (error) {
+        throw new Error('Не вдалося отримати оголошення: ' + error.message);
+    }
+};
+
+const getCalculatedPrices = async (usdData, price_usd, price_uah) => {
+    if (price_usd && price_uah) {
+        price_uah = calculatePrice(price_usd, usdData.rate);
+    }
+
+    if (!price_usd && price_uah) {
+        price_usd = price_uah / usdData.rate;
+    }
+
+    if (!price_uah && price_usd) {
+        price_uah = calculatePrice(price_usd, usdData.rate);
+    }
+
+    return { price_usd, price_uah };
+}
+
+const createAdvert = async (req) => {
+    try {
+        const user = await userRepository.getCurrentUser(req);
+        req.body.userId = user.id;
+        let { lat, lon,price_usd,price_uah,typeId,  ...advertData } = req.body;
+        if (!await isExistData(AdvertType, typeId)) {
+            throw new Error('Такого типу оголошення не існує');
+        }
+        const location = await locationRepository.createLocation(lat, lon);
+        let data= await getUsdToUahRate();
+
+        ({ price_usd, price_uah } = await getCalculatedPrices(data, price_usd, price_uah));
+
+        return await Advert.create({ ...advertData,typeId:typeId, price_usd:price_usd,price_uah:price_uah,locationId: location.id });
+    } catch (error) {
+        throw new Error('Не вдалося створити оголошення: ' + error.message);
+    }
+};
+
+const updateAdvertById = async (id, body) => {
+    try {
+        const advert = await Advert.findByPk(id);
+        if (!advert) {
+            throw new Error('Оголошення не знайдено');
+        }
+
+        let { price_uah, price_usd,area,description } = body;
+        let updateFields = {};
+
+        if (price_uah || price_usd) {
+            let data= await getUsdToUahRate();
+            ({ price_usd, price_uah } = await getCalculatedPrices(data, price_usd, price_uah));
+            updateFields.price_uah = price_uah;
+            updateFields.price_usd = price_usd;
+        }
+        if (area) updateFields.area = area;
+        if (description) updateFields.description = description;
+
+        return await advert.update(updateFields);
+    } catch (error) {
+        throw new Error('Не вдалося оновити оголошення: ' + error.message);
+    }
+};
+
+const deleteAdvertById = async (id) => {
+    try {
+        const advert = await Advert.findByPk(id);
+        if (!advert) {
+            throw new Error('Оголошення не знайдено');
+        }
+        await advert.destroy();
+        return { message: 'Оголошення успішно видалено' };
+    } catch (error) {
+        throw new Error('Не вдалося видалити оголошення: ' + error.message);
+    }
+};
+
+module.exports = {
+    getAllAdverts,
+    getAdvertById,
+    createAdvert,
+    updateAdvertById,
+    deleteAdvertById,
+    getSearchedAdverts,
+};

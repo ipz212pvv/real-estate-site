@@ -1,0 +1,30 @@
+
+const LoginRoutes = require('./LoginRoutes');
+const UserRoutes = require('./UserRoutes');
+const UserTypeRoutes = require('./UserTypeRoutes');
+const BenefitsRoutes = require('./BenefitsRoutes');
+const LocationRoutes = require('./LocationRoutes');
+const NearbyPlacesRoutes = require('./NearbyPlacesRoutes');
+const AdvertRoutes = require('./AdvertRoutes');
+const AdvertImageRoutes = require('./AdvertImageRoutes');
+const ComplaintRoutes = require('./ComplaintRoutes');
+const LikedAdvertisementRoutes = require('./LikedAdvertisementRoutes');
+const AdvertBenefitsRoutes = require('./AdvertBenefitsRoutes');
+const AdvertNearbyPlacesRoutes = require('./AdvertNearbyPlacesRoutes');
+const AdvertCommentRoutes = require('./AdvertCommentRoutes');
+
+module.exports = {
+  LoginRoutes,
+  UserRoutes,
+  BenefitsRoutes,
+  LocationRoutes,
+  AdvertRoutes,
+  AdvertImageRoutes,
+  NearbyPlacesRoutes,
+  AdvertCommentRoutes,
+  ComplaintRoutes,
+  LikedAdvertisementRoutes,
+  AdvertBenefitsRoutes,
+  AdvertNearbyPlacesRoutes,
+  UserTypeRoutes
+};
