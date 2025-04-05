@@ -1,12 +1,11 @@
 import { api } from "@/store/services/api.js";
 
-const userType = api.injectEndpoints({
+const userTypes = api.injectEndpoints({
   endpoints: (build) => ({
-    example: build.query({
-      query: () => 'test',
+    getUserTypes: build.query({
+      query: () => '/user-types',
     }),
   }),
-  overrideExisting: false,
 })
 
-export const { useExampleQuery } = userType
+export const { useGetUserTypesQuery } = userTypes

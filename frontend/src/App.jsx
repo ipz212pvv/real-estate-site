@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router";
 
 import { Home } from "@/pages/Home.jsx";
 import { Login } from "@/pages/Login.jsx";
+import { Registration } from "@/pages/Registration.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="rent" element={<div>Rent</div>} />
           <Route path="new-buildings" element={<div>New-buildings</div>} />
           <Route path="login" element={<Login />} />
+          <Route path="registration" element={<Registration />} />
         </Route>
       </Routes>
     </ErrorBoundary>
