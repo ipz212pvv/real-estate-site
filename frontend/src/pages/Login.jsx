@@ -45,13 +45,13 @@ export function Login() {
             name="password"
             rules={[{ required: true, message: "Пароль обов'язковий" }]}
           >
-            <Input prefix={<TbLockPassword />} type="password" placeholder="Пароль" />
+            <Input.Password prefix={<TbLockPassword />} placeholder="Пароль" />
           </Form.Item>
           <Form.Item style={{ textAlign: "center" }}>
             <Button style={{ fontSize: 16 }} size="large" block type="primary" htmlType="submit">
               Увійти
             </Button>
-            або <Button href="/registration" type="link" style={{ padding: 0 }}>Зареєструватися</Button>
+            Немає акаунту? <Button href="/registration" type="link" style={{ padding: 0 }}>Зареєструватися</Button>
           </Form.Item>
         </Form>
       </Card>

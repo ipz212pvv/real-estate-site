@@ -31,6 +31,31 @@ export const loginUser = createAsyncThunk(
   }
 )
 
+export const registerUser = createAsyncThunk(
+  'auth/register',
+  async ({ name, surname, phone, email, password, userTypeId }, { dispatch, rejectWithValue }) => {
+    try {
+      const { data: loginData } = await axiosInstance.post(`/users`, {
+        name,
+        surname,
+        phone,
+        email,
+        password,
+        userTypeId
+      });
+      const token = loginData?.token;
+
+      localStorage.setItem('token', token);
+
+      await dispatch(getUserData());
+
+      return token;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+)
+
 const initialState = {
   user: null,
   token: localStorage.getItem('token'),
@@ -57,6 +82,18 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
+        state.loading = false
+        state.token = payload
+      })
+      .addCase(registerUser.rejected, (state, { payload }) => {
+        state.loading = false
+        state.error = payload
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true
         state.error = null
