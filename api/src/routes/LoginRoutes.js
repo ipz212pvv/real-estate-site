@@ -95,7 +95,7 @@ router.post('/', async (req, res) => {
 
     res.status(200).json({ message: 'Вхід успішний',token:token });
   } catch (error) {
-    res.status(400).json({ message:error });
+    res.status(400).json({ message: error.message  });
   }
 });
 

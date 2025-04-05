@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router";
+import { useSelector } from "react-redux";
 import { Button, Flex, Layout, Menu, Grid, Drawer } from "antd";
 
 import { Container } from "@/components/common/Container.jsx";
@@ -33,6 +34,7 @@ export function Header() {
   const location = useLocation();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [activeLink, setActiveLink] = useState(0);
+  const user = useSelector(state => state.auth.user);
 
   useEffect(() => {
     NAV_ITEMS.forEach(({ path }, i) => {
@@ -97,7 +99,14 @@ export function Header() {
             </>
           )}
           <Flex gap="small">
-            <Button size="large" type="text" style={{ fontSize: "16px" }}><FaRegUserCircle size="20px"/> Увійти</Button>
+            <Button
+              size="large"
+              type="text"
+              style={{ fontSize: "16px" }}
+              href={user ? "/profile" : "/login"}
+            >
+              <FaRegUserCircle size="20px"/> {user ? "Профіль" : "Увійти"}
+            </Button>
           </Flex>
         </Flex>
       </Container>
