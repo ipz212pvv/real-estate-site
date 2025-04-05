@@ -11,7 +11,7 @@ export function DefaultLayout() {
     <Layout>
       <Header/>
       <Content style={{ minHeight: "calc(100vh - 64px)" }}>
-        <Container>
+        <Container style={{ paddingBlock: 20 }}>
           <ErrorBoundary>
             <Outlet/>
           </ErrorBoundary>
