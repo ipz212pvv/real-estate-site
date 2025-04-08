@@ -33,7 +33,7 @@ export function Header() {
   const screens = Grid.useBreakpoint();
   const location = useLocation();
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [activeLink, setActiveLink] = useState(0);
+  const [activeLink, setActiveLink] = useState(null);
   const user = useSelector(state => state.auth.user);
 
   useEffect(() => {
@@ -43,6 +43,8 @@ export function Header() {
       }
     })
   }, [location]);
+
+  const selectedKeys = activeLink ? [activeLink.toString()] : [];
 
   const menuItems = useMemo(() => NAV_ITEMS.map(({ label, path }, i) => ({
     key: i.toString(),
@@ -65,7 +67,7 @@ export function Header() {
           {screens.md ? (
             <Menu
               className={styles["menu-desktop"]}
-              selectedKeys={[activeLink.toString()]}
+              selectedKeys={selectedKeys}
               mode="horizontal"
               onClick={handleChangeMenuItem}
               items={menuItems}
@@ -90,7 +92,7 @@ export function Header() {
                 open={openDrawer}
               >
                 <Menu
-                  selectedKeys={[activeLink.toString()]}
+                  selectedKeys={selectedKeys}
                   onClick={handleChangeMenuItem}
                   items={menuItems}
                   style={{ flex: 1, minWidth: 0, border: "none" }}

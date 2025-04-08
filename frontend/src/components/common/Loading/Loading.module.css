@@ -1,0 +1,7 @@
+.nested-spinner {
+    :global(.anticon-spin) {
+        left: 50%;
+        translate: -50% -50%;
+        margin: 0 !important;
+    }
+}

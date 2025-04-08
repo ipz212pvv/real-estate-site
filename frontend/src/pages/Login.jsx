@@ -13,7 +13,7 @@ export function Login() {
   const onFinish = (userData) => {
     dispatch(loginUser(userData))
       .unwrap()
-      .then(() => navigate("/account"))
+      .then(() => navigate("/profile"))
       .catch(err => {
         notification.error({
           message: "Помилка",

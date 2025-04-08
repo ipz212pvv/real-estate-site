@@ -70,10 +70,9 @@ export const authSlice = createSlice({
     logout: (state, { payload }) => {
       const { redirectTo } = payload;
 
-      state.user = null;
-      state.token = null;
-
       localStorage.removeItem('token');
+
+      state = { ...initialState }
 
       if (redirectTo) {
         window.location.href = redirectTo;
