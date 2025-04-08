@@ -6,6 +6,7 @@ import { Home } from "@/pages/Home.jsx";
 import { Login } from "@/pages/Login.jsx";
 import { Registration } from "@/pages/Registration.jsx";
 import { Profile } from "@/pages/Profile.jsx";
+import { ProfileAdverts } from "@/pages/ProfileAdverts.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
@@ -35,6 +36,7 @@ function App() {
           <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
             <Route path="profile" element={<ProfileLayout />}>
               <Route index element={<Profile />} />
+              <Route path="adverts" element={<ProfileAdverts />} />
             </Route>
           </Route>
           <Route path="login" element={<Login />} />
