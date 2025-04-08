@@ -22,8 +22,6 @@ export function Registration() {
   })), [userTypes]);
 
   const onFinish = (userData) => {
-    userData.phone = `+380${userData.phone}`;
-
     dispatch(registerUser(userData))
     .unwrap()
     .then(() => navigate("/account"))
@@ -65,10 +63,10 @@ export function Registration() {
             name="phone"
             rules={[
               { required: true, message: "Телефон обов'язковий", whitespace: true },
-              { type: "string", pattern: "^[0-9]{9}$", message: "Невірний формат телефону" },
+              { type: "string", pattern: "^[0-9]{10}$", message: "Невірний формат телефону" },
             ]}
           >
-            <Input addonBefore="+380" placeholder="Телефон" />
+            <Input addonBefore="+38" placeholder="Телефон" />
           </Form.Item>
           <Form.Item
             name="email"

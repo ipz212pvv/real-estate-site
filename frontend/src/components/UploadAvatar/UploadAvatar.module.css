@@ -1,0 +1,15 @@
+.avatar {
+    :global(.ant-upload-select) {
+        width: 200px !important;
+        height: 200px !important;
+    }
+
+    :global(.anticon-delete) svg {
+        color: var(--ant-red-6);
+    }
+
+    :global(.ant-upload:not(.ant-upload-select)) {
+        display: flex;
+        flex-direction: column;
+    }
+}
