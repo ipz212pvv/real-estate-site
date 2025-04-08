@@ -87,6 +87,31 @@ router.get('/search', async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /api/adverts/user:
+ *   get:
+ *     summary: User adverts
+ *     description: Fetches a list of user adverts
+ *     tags:
+ *       - adverts
+ *     responses:
+ *       200:
+ *         description: List of user adverts
+ *       400:
+ *         description: Bad request
+ */
+router.get('/user',authMiddleware,  async (req, res) => {
+  try {
+
+    const adverts = await repository.getUserAdverts(req);
+    res.status(200).json(adverts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 /**
  * @swagger
  * /api/adverts:
@@ -192,7 +217,7 @@ router.post('/', authMiddleware, async (req, res) => {
     const newAdvert = await repository.createAdvert(req);
     res.status(201).json(newAdvert);
   } catch (error) {
-    res.status(400).json({error: error.message});
+    res.status(400).json({ error: error.message });
   }
 });
 

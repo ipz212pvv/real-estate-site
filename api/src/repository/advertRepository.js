@@ -7,6 +7,7 @@ const FileService = require('../services/FileService');
 const {getUsdToUahRate,calculatePrice} = require("../services/RateFetcherService");
 const { Op } = require("sequelize");
 const { isExistData } = require("../utils/isExist");
+const { getDecodedTokenFromHeader } = require("../utils/token");
 
 const include =  [
     getUserInclude("userOfAdvert"),
@@ -83,6 +84,19 @@ const getAllAdverts = async (where = {}) => {
         });
         await updateAdvertImages(adverts);
         return adverts;
+    } catch (error) {
+        throw new Error('Не вдалося отримати оголошення: ' + error.message);
+    }
+};
+
+const getUserAdverts = async (req) => {
+    try {
+        const  decoded = getDecodedTokenFromHeader(req);
+        const user = await models.User.findOne({ where: { email: decoded.email } });
+
+        return await getAllAdverts({
+            'userId': user.id,
+        });
     } catch (error) {
         throw new Error('Не вдалося отримати оголошення: ' + error.message);
     }
@@ -184,4 +198,5 @@ module.exports = {
     updateAdvertById,
     deleteAdvertById,
     getSearchedAdverts,
+    getUserAdverts
 };
