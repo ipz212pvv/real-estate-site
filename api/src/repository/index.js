@@ -11,6 +11,7 @@ const advertBenefitsRepository = require('./advertBenefitsRepository');
 const advertNearbyPlacesRepository = require('./advertNearbyPlacesRepository');
 const advertRepository = require('./advertRepository');
 const advertCommentRepository = require('./advertCommentRepository');
+const advertPropertyTypeRepository = require('./advertPropertyTypeRepository');
 
 module.exports = {
     advertCommentRepository,
@@ -25,5 +26,6 @@ module.exports = {
     advertBenefitsRepository,
     advertNearbyPlacesRepository,
     advertRepository,
+    advertPropertyTypeRepository,
     advertImageRepository
 };
