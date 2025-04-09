@@ -19,6 +19,21 @@ const ownerMiddleware = require("../middlewares/ownerMiddleware");
  *           type: integer
  *         description: Filter by advert type
  *       - in: query
+ *         name: floor
+ *         schema:
+ *           type: integer
+ *         description: Filter by floor
+ *       - in: query
+ *         name: room
+ *         schema:
+ *           type: integer
+ *         description: Filter by room
+ *       - in: query
+ *         name: propertyTypeId
+ *         schema:
+ *           type: integer
+ *         description: Filter by advert property type
+ *       - in: query
  *         name: minPriceUah
  *         schema:
  *           type: number
@@ -183,6 +198,9 @@ router.get('/:id', async (req, res) => {
  *             type: object
  *             properties:
  *               typeId:
+ *                 type: integer
+ *                 example: 2
+ *               propertyTypeId:
  *                 type: integer
  *                 example: 2
  *               price_uah:

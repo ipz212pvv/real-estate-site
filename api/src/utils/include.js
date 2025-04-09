@@ -37,6 +37,10 @@ const getAdvertTypeInclude = () => ({
     model: models.AdvertType,
     as: "advertTypeForAdvert",
 });
+const getAdvertPropertyTypeInclude = () => ({
+    model: models.AdvertPropertyType,
+    as: "advertPropertyTypeForAdvert",
+});
 
 const getAdvertBenefitsInclude = () => ({
     model: models.AdvertBenefits,
@@ -65,5 +69,6 @@ module.exports = {
     getAdvertImageInclude,
     getNearbyPlacesInclude,
     getAdvertNearbyPlacesInclude,
-    getAdvertCommentInclude
+    getAdvertCommentInclude,
+    getAdvertPropertyTypeInclude
 };

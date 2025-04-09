@@ -2,7 +2,7 @@ const setupAssociations = (models) => {
     const { User, UserType, Location, NearbyPlaces,
         Advert, AdvertType, Complaint, AdvertImage,
         LikedAdvertisement, AdvertBenefits, Benefits,
-        AdvertNearbyPlaces, AdvertComment } = models;
+        AdvertNearbyPlaces, AdvertComment,AdvertPropertyType } = models;
 
     User.belongsTo(UserType, {
         foreignKey: 'userTypeId',
@@ -42,6 +42,16 @@ const setupAssociations = (models) => {
     AdvertType.hasMany(Advert, {
         foreignKey: 'typeId',
         as: 'advertsOfAdvertType',
+    });
+
+    Advert.belongsTo(AdvertPropertyType, {
+        foreignKey: 'propertyTypeId',
+        as: 'advertPropertyTypeForAdvert',
+    });
+
+    AdvertPropertyType.hasMany(Advert, {
+        foreignKey: 'propertyTypeId',
+        as: 'advertsOfAdvertPropertyType',
     });
 
     Advert.belongsTo(Location, {

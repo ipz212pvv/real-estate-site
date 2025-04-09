@@ -24,6 +24,13 @@ const Advert = sequelize.define('Advert', {
             notNull: { msg: 'typeId обовʼязковий' },
         },
     },
+    propertyTypeId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+            notEmpty: { msg: 'propertyTypeId не може бути порожнім' },
+        },
+    },
     price_uah: {
         type: DataTypes.FLOAT,
         allowNull: false,

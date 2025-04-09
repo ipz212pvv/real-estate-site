@@ -1,8 +1,8 @@
 const { models } = require('../models');
 const userRepository = require("./userRepository");
 const locationRepository = require("./locationRepository");
-const { Advert ,AdvertType} = models;
-const { getAdvertCommentInclude,getUserInclude,getLocationInclude,getAdvertTypeInclude ,getAdvertImageInclude,getAdvertBenefitsInclude, getAdvertNearbyPlacesInclude} = require('./../utils/include');
+const { Advert ,AdvertType,AdvertPropertyType} = models;
+const { getAdvertCommentInclude,getAdvertPropertyTypeInclude,getUserInclude,getLocationInclude,getAdvertTypeInclude ,getAdvertImageInclude,getAdvertBenefitsInclude, getAdvertNearbyPlacesInclude} = require('./../utils/include');
 const FileService = require('../services/FileService');
 const {getUsdToUahRate,calculatePrice} = require("../services/RateFetcherService");
 const { Op } = require("sequelize");
@@ -15,7 +15,8 @@ const include =  [
     getAdvertTypeInclude(),
     getAdvertImageInclude(),
     getAdvertBenefitsInclude(),
-    getAdvertNearbyPlacesInclude()
+    getAdvertNearbyPlacesInclude(),
+    getAdvertPropertyTypeInclude()
 ];
 
 const updateAdvertImages = async (adverts) => {
@@ -38,10 +39,13 @@ const updateAdvertImages = async (adverts) => {
 
 const getSearchedAdverts = async (query) => {
     try {
-        const { typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
+        const { propertyTypeId,floor,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
         let where = {};
 
         if (typeId) where.typeId = typeId;
+        if (propertyTypeId) where.propertyTypeId = propertyTypeId;
+        if (floor) where.floor = floor;
+        if (room) where.room = room;
 
         if (minPriceUah || maxPriceUah) {
             where.price_uah = { ...(where.price_uah || {}) };
@@ -138,8 +142,11 @@ const createAdvert = async (req) => {
     try {
         const user = await userRepository.getCurrentUser(req);
         req.body.userId = user.id;
-        let { lat, lon,price_usd,price_uah,typeId,  ...advertData } = req.body;
+        let { lat, lon,price_usd,price_uah,typeId,propertyTypeId,  ...advertData } = req.body;
         if (!await isExistData(AdvertType, typeId)) {
+            throw new Error('Такого типу оголошення не існує');
+        }
+        if (!await isExistData(AdvertPropertyType, propertyTypeId)) {
             throw new Error('Такого типу оголошення не існує');
         }
         const location = await locationRepository.createLocation(lat, lon);
@@ -147,7 +154,7 @@ const createAdvert = async (req) => {
 
         ({ price_usd, price_uah } = await getCalculatedPrices(data, price_usd, price_uah));
 
-        return await Advert.create({ ...advertData,typeId:typeId, price_usd:price_usd,price_uah:price_uah,locationId: location.id });
+        return await Advert.create({ ...advertData,typeId:typeId, propertyTypeId:propertyTypeId,price_usd:price_usd,price_uah:price_uah,locationId: location.id });
     } catch (error) {
         throw new Error('Не вдалося створити оголошення: ' + error.message);
     }

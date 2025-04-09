@@ -13,6 +13,7 @@ const LikedAdvertisement = require('./LikedAdvertisement');
 const AdvertBenefits = require('./AdvertBenefits');
 const AdvertNearbyPlaces = require('./AdvertNearbyPlaces');
 const AdvertComment = require('./AdvertComment');
+const AdvertPropertyType = require('./AdvertPropertyType');
 
 const models = {
   User,
@@ -27,6 +28,7 @@ const models = {
   LikedAdvertisement,
   AdvertBenefits,
   AdvertNearbyPlaces,
+  AdvertPropertyType,
   AdvertComment
 };
 
