@@ -45,6 +45,28 @@ const Advert = sequelize.define('Advert', {
             isFloat: { msg: 'Площа повинна бути числом' },
         },
     },
+    room: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+            isInt: { msg: 'Кімнати повинні бути числом' },
+            min: {
+                args: [1],
+                msg: 'Має бути принаймні одна кімната',
+            },
+        },
+    },
+    floor: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+            isInt: { msg: 'Поверх повинен бути числом' },
+            min: {
+                args: [1],
+                msg: 'Має бути принаймні один поверх',
+            },
+        },
+    },
     locationId: {
         type: DataTypes.INTEGER,
         allowNull: false,

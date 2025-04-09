@@ -200,12 +200,18 @@ router.get('/:id', async (req, res) => {
  *               description:
  *                 type: string
  *                 example: "A beautiful flat with sea view."
+ *               room:
+ *                 type: integer
+ *                 example: 2
+ *               floor:
+ *                 type: integer
+ *                 example: 2
  *               lat:
  *                 type: string
- *                 example: "48.8588443"
+ *                 example: "50.2663590"
  *               lon:
  *                 type: string
- *                 example: "2.2943506"
+ *                 example: "28.6873140"
  *     responses:
  *       201:
  *         description: Advert created successfully
@@ -254,6 +260,12 @@ router.post('/', authMiddleware, async (req, res) => {
  *                 type: number
  *                 format: float
  *                 example: 80.0
+ *               room:
+ *                 type: integer
+ *                 example: 2
+ *               floor:
+ *                 type: integer
+ *                 example: 2
  *               description:
  *                 type: string
  *                 example: "Updated description of the flat."

@@ -12,6 +12,7 @@ const LikedAdvertisementRoutes = require('./LikedAdvertisementRoutes');
 const AdvertBenefitsRoutes = require('./AdvertBenefitsRoutes');
 const AdvertNearbyPlacesRoutes = require('./AdvertNearbyPlacesRoutes');
 const AdvertCommentRoutes = require('./AdvertCommentRoutes');
+const AdvertTypeRoutes = require('./AdvertTypeRoutes');
 
 module.exports = {
   LoginRoutes,
@@ -26,5 +27,6 @@ module.exports = {
   LikedAdvertisementRoutes,
   AdvertBenefitsRoutes,
   AdvertNearbyPlacesRoutes,
-  UserTypeRoutes
+  UserTypeRoutes,
+  AdvertTypeRoutes
 };
