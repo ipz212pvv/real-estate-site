@@ -160,7 +160,7 @@ const updateAdvertById = async (id, body) => {
             throw new Error('Оголошення не знайдено');
         }
 
-        let { price_uah, price_usd,area,description } = body;
+        let { price_uah, price_usd,area,description,floor,room } = body;
         let updateFields = {};
 
         if (price_uah || price_usd) {
@@ -171,6 +171,8 @@ const updateAdvertById = async (id, body) => {
         }
         if (area) updateFields.area = area;
         if (description) updateFields.description = description;
+        if (floor) updateFields.floor = floor;
+        if (room) updateFields.room = room;
 
         return await advert.update(updateFields);
     } catch (error) {

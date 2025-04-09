@@ -16,7 +16,8 @@ const {
     LikedAdvertisementRoutes,
     AdvertNearbyPlacesRoutes,
     AdvertCommentRoutes,
-    AdvertBenefitsRoutes
+    AdvertBenefitsRoutes,
+    AdvertTypeRoutes
 } = require("./routes");
 
 const app = express();
@@ -41,6 +42,7 @@ app.use('/api/liked-advertisements', LikedAdvertisementRoutes);
 app.use('/api/advert-benefits', AdvertBenefitsRoutes);
 app.use('/api/advert-nearby-places', AdvertNearbyPlacesRoutes);
 app.use('/api/advert-comments', AdvertCommentRoutes);
+app.use('/api/advert-types', AdvertTypeRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 module.exports = app;
