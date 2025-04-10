@@ -1,19 +1,24 @@
 import { api } from "@/store/services/api.js";
+import { provideListTagsById } from "@/utils/provideListTagsById.js";
 
 const adverts = api.injectEndpoints({
   tagTypes: ['Adverts'],
   endpoints: (build) => ({
     getUserAdverts: build.query({
       query: () => '/adverts/user',
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Adverts', id })),
-              { type: 'Adverts', id: 'LIST' },
-            ]
-          : [{ type: 'Adverts', id: 'LIST' }],
+      providesTags: (result) => provideListTagsById(result, "Adverts"),
+    }),
+    createAdvert: build.mutation({
+      query(requestData) {
+        return {
+          url: `/adverts`,
+          method: "POST",
+          data: requestData,
+        }
+      },
+      invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
     }),
   }),
 })
 
-export const { useGetUserAdvertsQuery } = adverts
+export const { useGetUserAdvertsQuery, useCreateAdvertMutation } = adverts

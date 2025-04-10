@@ -4,20 +4,24 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('advert_property_type', [
       {
-        name: 'квартира',
+        name: 'Квартира',
         description: 'Оголошення про оренду або купівлю квартир',
       },
       {
-        name: 'дім',
+        name: 'Будинок',
         description: 'Оголошення про оренду або купівлю будинків',
       },
       {
-        name: 'земна ділянка',
+        name: 'Земельна ділянка',
         description: 'Оголошення про оренду або купівлю земельних ділянок',
       },
       {
-        name: 'гараж',
+        name: 'Гараж',
         description: 'Оголошення про оренду або купівлю гаражів',
+      },
+      {
+        name: 'Комерційна нерухомість',
+        description: 'Оголошення про оренду або купівлю комерційної нерухомості',
       },
     ]);
   },
@@ -25,7 +29,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('advert_property_type', {
       name: {
-        [Sequelize.Op.in]: ['квартира', 'дім', 'земна ділянка', 'гараж'],
+        [Sequelize.Op.in]: ['Квартира', 'Будинок', 'Земельна ділянка', 'Гараж', 'Комерційна нерухомість'],
       },
     });
   },

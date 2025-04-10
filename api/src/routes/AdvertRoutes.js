@@ -63,6 +63,11 @@ const ownerMiddleware = require("../middlewares/ownerMiddleware");
  *           type: string
  *         description: Filter by city
  *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Filter by title
+ *       - in: query
  *         name: country
  *         schema:
  *           type: string
@@ -218,6 +223,9 @@ router.get('/:id', async (req, res) => {
  *               description:
  *                 type: string
  *                 example: "A beautiful flat with sea view."
+ *               title:
+ *                 type: string
+ *                 example: "A beautiful flat with sea view."
  *               room:
  *                 type: integer
  *                 example: 2
@@ -285,6 +293,9 @@ router.post('/', authMiddleware, async (req, res) => {
  *                 type: integer
  *                 example: 2
  *               description:
+ *                 type: string
+ *                 example: "Updated description of the flat."
+ *               title:
  *                 type: string
  *                 example: "Updated description of the flat."
  *     responses:

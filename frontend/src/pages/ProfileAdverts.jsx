@@ -1,4 +1,5 @@
-import { Button, Empty, Flex, Typography } from "antd";
+import { Link } from "react-router";
+import { Button, Card, Empty, Flex, Typography } from "antd";
 
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 
@@ -13,13 +14,19 @@ export function ProfileAdverts() {
     <>
       <Flex gap="small" justify="space-between" align="center" wrap="wrap">
         <Typography.Title level={4} style={{ margin: 0 }}>Мої оголошення</Typography.Title>
-        <Button type="primary" size="large">Створити оголошення</Button>
+        <Button type="primary" size="large">
+          <Link to="/profile/adverts/create">
+            Створити оголошення
+          </Link>
+        </Button>
       </Flex>
-      {adverts.length > 0 ? (
-        <div></div>
-      ) : (
-        <Empty description="Оголошення відсутні" />
-      )}
+      <Card style={{ marginTop: 16 }}>
+        {adverts.length > 0 ? (
+          <div></div>
+        ) : (
+          <Empty description="Оголошення відсутні" />
+        )}
+      </Card>
     </>
   )
 }

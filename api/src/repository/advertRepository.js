@@ -39,13 +39,14 @@ const updateAdvertImages = async (adverts) => {
 
 const getSearchedAdverts = async (query) => {
     try {
-        const { propertyTypeId,floor,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
+        const { propertyTypeId,floor,title,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
         let where = {};
 
         if (typeId) where.typeId = typeId;
         if (propertyTypeId) where.propertyTypeId = propertyTypeId;
         if (floor) where.floor = floor;
         if (room) where.room = room;
+        if (title) where.title = { [Op.like]: `${title}%` };
 
         if (minPriceUah || maxPriceUah) {
             where.price_uah = { ...(where.price_uah || {}) };
@@ -167,7 +168,7 @@ const updateAdvertById = async (id, body) => {
             throw new Error('Оголошення не знайдено');
         }
 
-        let { price_uah, price_usd,area,description,floor,room } = body;
+        let { price_uah, price_usd,area,title,description,floor,room } = body;
         let updateFields = {};
 
         if (price_uah || price_usd) {
@@ -177,6 +178,7 @@ const updateAdvertById = async (id, body) => {
             updateFields.price_usd = price_usd;
         }
         if (area) updateFields.area = area;
+        if (title) updateFields.title = title;
         if (description) updateFields.description = description;
         if (floor) updateFields.floor = floor;
         if (room) updateFields.room = room;

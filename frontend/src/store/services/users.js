@@ -2,6 +2,7 @@ import { api } from "@/store/services/api.js";
 import { getUserData } from "@/store/slices/authSlice.js";
 
 const users = api.injectEndpoints({
+  tagTypes: ['Users'],
   endpoints: (build) => ({
     updateUserData: build.mutation({
       async queryFn(newData, { dispatch, getState }, __, fetchBQ) {
