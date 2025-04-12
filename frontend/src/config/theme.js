@@ -10,5 +10,8 @@ export const theme = {
       headerBg: "white",
       bodyBg: "white",
     },
+    Button: {
+      contentFontSizeLG: 16
+    }
   },
 }

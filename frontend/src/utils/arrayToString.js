@@ -1,0 +1,1 @@
+export const arrayToString = (array) => array.filter(Boolean).join(" ");

@@ -86,6 +86,10 @@ const Advert = sequelize.define('Advert', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

@@ -32,8 +32,9 @@ export function Profile() {
     <>
       <Typography.Title level={4}>Персональні дані</Typography.Title>
       <Card>
-        <Flex gap="middle">
+        <Flex gap="middle" wrap>
           <Form
+            style={{ flex: "1 1 400px" }}
             onFieldsChange={handleFieldChange}
             initialValues={{ name, surname, phone, email }}
             layout="vertical"
@@ -85,7 +86,7 @@ export function Profile() {
               </Col>
             </Row>
           </Form>
-          <div>
+          <div style={{ margin: "0 auto" }}>
             <UploadAvatar/>
           </div>
         </Flex>
