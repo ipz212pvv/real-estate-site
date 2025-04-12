@@ -18,7 +18,20 @@ const adverts = api.injectEndpoints({
       },
       invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
     }),
+    deleteAdvert: build.mutation({
+      query(id) {
+        return {
+          url: `/adverts/${id}`,
+          method: "DELETE",
+        }
+      },
+      invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
+    }),
   }),
 })
 
-export const { useGetUserAdvertsQuery, useCreateAdvertMutation } = adverts
+export const {
+  useGetUserAdvertsQuery,
+  useCreateAdvertMutation,
+  useDeleteAdvertMutation,
+} = adverts

@@ -29,7 +29,7 @@ export function ProfileAdvertsCreate() {
     data: advertPropertyTypes = [],
     isLoading: advertPropertyTypesLoading
   } = useGetAdvertPropertyTypesQuery();
-  const [createAdvert, { isLoading: loadingCreateAdvert }] = useCreateAdvertMutation();
+  const [createAdvert, { isLoading: creatingAdvert }] = useCreateAdvertMutation();
 
   const initialValues = {
     priceCurrency: "usd"
@@ -62,7 +62,7 @@ export function ProfileAdvertsCreate() {
 
     createAdvert(formData)
       .unwrap()
-      .then(({ id }) => navigate(`/profile/adverts/${id}`))
+      .then(({ id }) => navigate(`/profile/adverts/${id}/edit`))
       .catch(err => {
         notification.error({
           message: "Помилка",
@@ -186,7 +186,8 @@ export function ProfileAdvertsCreate() {
           </Row>
           <Button
             style={{ fontSize: 16, marginTop: 16 }}
-            disabled={loadingCreateAdvert}
+            disabled={creatingAdvert}
+            loading={creatingAdvert}
             size="large"
             type="primary"
             htmlType="submit"

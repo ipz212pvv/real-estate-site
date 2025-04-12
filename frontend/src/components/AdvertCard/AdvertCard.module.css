@@ -1,11 +1,21 @@
 .card {
+    position: relative;
     margin: 8px;
     border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    color: initial;
     transition: transform 0.2s;
 
     &:hover {
         transform: scale(1.02);
     }
+}
+
+.actions {
+    position: absolute;
+    right: 0;
+    margin: 8px;
+    z-index: 1;
 }
 
 .divider {
@@ -15,9 +25,6 @@
 }
 
 .card-description {
-    border: 1px solid rgba(0,0,0,0.1);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
     padding: 8px 8px 16px 8px;
 }
 
