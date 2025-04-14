@@ -18,6 +18,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
+import { NewBuildings } from "@/pages/NewBuildings.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="buy" element={<Buy/>} />
           <Route path="rent" element={<Rent/>} />
-          <Route path="new-buildings" element={<div>New-buildings</div>} />
+          <Route path="new-buildings" element={<NewBuildings />} />
           <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
             <Route path="profile" element={<ProfileLayout />}>
               <Route index element={<Profile />} />
