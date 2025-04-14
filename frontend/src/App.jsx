@@ -10,6 +10,7 @@ import { ProfileAdverts } from "@/pages/ProfileAdverts.jsx";
 import { ProfileAdvertsCreate } from "@/pages/ProfileAdvertsCreate.jsx";
 import { ProfileAdvertsEdit } from "@/pages/ProfileAdvertsEdit.jsx";
 import { Buy } from "@/pages/Buy.jsx";
+import { Rent } from "@/pages/Rent.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
@@ -34,7 +35,7 @@ function App() {
         <Route path="/" element={<DefaultLayout />}>
           <Route index element={<Home />} />
           <Route path="buy" element={<Buy/>} />
-          <Route path="rent" element={<div>Rent</div>} />
+          <Route path="rent" element={<Rent/>} />
           <Route path="new-buildings" element={<div>New-buildings</div>} />
           <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
             <Route path="profile" element={<ProfileLayout />}>
