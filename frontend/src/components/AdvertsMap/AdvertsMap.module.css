@@ -23,3 +23,12 @@
         color: #fff;
     }
 }
+
+.card-popup {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 350px;
+    transform: scale(0.8) translate(-15%, -15%);
+    z-index: 1
+}

@@ -5,6 +5,7 @@ import { Marker } from "@maptiler/sdk";
 import { Map } from "@/components/common/Map.jsx";
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { AdvertList } from "@/components/AdvertList/AdvertList.jsx";
+import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
 import { useGetAdvertByIdQuery, useSearchAdvertsQuery } from "@/store/services/adverts.js";
 import { useSearchParams } from "@/hooks/useSearchParams.js";
@@ -183,7 +184,16 @@ export function AdvertsMap() {
 
   return (
     <Space style={{ width: "100%" }} size="middle" direction="vertical">
-      <Map className={styles.map} style={{ height: 600 }} onLoad={handleMapLoad}/>
+      <div style={{ position: "relative" }}>
+        {advert && (
+          <Loading spinning={loadingAdvert}>
+            <div className={styles["card-popup"]}>
+              <AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
+            </div>
+          </Loading>
+        )}
+        <Map className={styles.map} style={{ height: 600 }} onLoad={handleMapLoad}/>
+      </div>
       <Typography.Title level={3} style={{ marginBottom: 0 }}>Оголошення</Typography.Title>
       <AdvertList adverts={adverts} />
     </Space>
