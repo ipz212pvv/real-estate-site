@@ -17,15 +17,15 @@ const NAV_ITEMS = [
   },
   {
     label: "Купівля",
-    path: "/buy",
+    path: "/buy?typeId=1",
   },
   {
     label: "Оренда",
-    path: "/rent",
+    path: "/rent?typeId=2",
   },
   {
     label: "Новобудови",
-    path: "/new-buildings",
+    path: "/new-buildings?typeId=3",
   }
 ];
 

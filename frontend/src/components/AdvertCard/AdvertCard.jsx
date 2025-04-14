@@ -1,11 +1,12 @@
 import { Link } from "react-router";
-import { Badge, Button, Divider, Flex, Space, Tooltip, Typography } from "antd";
-import { FiHeart } from "react-icons/fi";
+import { Badge, Divider, Flex, Space, Typography } from "antd";
 import { MdOutlineBed } from "react-icons/md";
 import { PiStairs } from "react-icons/pi";
 import { RiCustomSize } from "react-icons/ri";
 
 import { Image } from "@/components/common/Image.jsx";
+import { Tooltip } from "@/components/common/Tooltip.jsx";
+import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
 
 import styles from "./AdvertCard.module.css";
 import { arrayToString } from "@/utils/arrayToString.js";
@@ -59,11 +60,7 @@ export function AdvertCard(props) {
 					<Flex gap="small" align="center">
 						<Typography.Text strong style={{ fontSize: 24 }}>{price_usd} $</Typography.Text>
 						<Typography.Text>{pricePerMeter} $ за м²</Typography.Text>
-						{like && (
-							<Button className={styles["like-btn"]} size="small" type="text">
-								<FiHeart size={24} />
-							</Button>
-						)}
+						{like && <AdvertLikeBtn/>}
 					</Flex>
 					<Typography.Text style={{ display: "flex", height: 50 }}>{locationDisplay}</Typography.Text>
 					<Space
@@ -72,21 +69,21 @@ export function AdvertCard(props) {
 		        split={<Divider className={styles.divider} type="vertical" />}
 					>
 						{room && (
-							<Tooltip classNames={{ body: styles["tooltip-body"] }} title="Кімнати" color="orange">
+							<Tooltip size="small" title="Кімнати" color="orange">
 								<Flex justify="center" align="center" gap="small">
 									<MdOutlineBed color="var(--ant-orange-6)" size={20}/>
 									{room}
 								</Flex>
 							</Tooltip>
 						)}
-						<Tooltip classNames={{ body: styles["tooltip-body"] }} title="Площа" color="orange">
+						<Tooltip size="small" title="Площа" color="orange">
 							<Flex justify="center" align="center" gap="small">
 								<RiCustomSize color="var(--ant-orange-6)" size={20}/>
 								{area} м²
 							</Flex>
 						</Tooltip>
 						{floor && (
-							<Tooltip classNames={{ body: styles["tooltip-body"] }} title={floorTooltip} color="orange">
+							<Tooltip size="small" title={floorTooltip} color="orange">
 								<Flex justify="center" align="center" gap="small">
 									<PiStairs color="var(--ant-orange-6)" size={20}/>
 									{floorDisplay}

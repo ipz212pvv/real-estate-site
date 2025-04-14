@@ -1,0 +1,11 @@
+.divider {
+    height: 16px;
+    margin: 0;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.slider-col {
+    @media (min-width: 768px) {
+        max-width: 400px;
+    }
+}

@@ -86,6 +86,7 @@ const getAllAdverts = async (where = {}) => {
         const adverts = await Advert.findAll({
             where,
             include: include,
+            order: [['createdAt', 'DESC']],
         });
         await updateAdvertImages(adverts);
         return adverts;

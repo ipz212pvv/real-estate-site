@@ -57,7 +57,9 @@ const createAdvertImage = async (req) => {
             imageUrl: imageName
        });
 
-       return  await FileService.uploadAdvertImage(advertImage.id,imageUrl);
+       const image =  await FileService.uploadAdvertImage(advertImage.id,imageUrl);
+        advertImage.imageUrl = await FileService.getAdvertImage(image);
+       return advertImage;
     } catch (error) {
         throw new Error('Не вдалося створити зображення реклами: ' + error.message);
     }

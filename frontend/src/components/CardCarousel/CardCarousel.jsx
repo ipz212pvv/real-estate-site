@@ -1,4 +1,4 @@
-import { Carousel } from "@/components/common/Carousel.jsx";
+import { Carousel } from "@/components/common/Carousel/Carousel.jsx";
 
 import styles from "./CardCarousel.module.css";
 import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
@@ -8,7 +8,6 @@ export function CardCarousel({ items }) {
     <Carousel
       className={styles.carousel}
       infinite={false}
-      speed={300}
       slidesToShow={3}
       responsive={[
         {

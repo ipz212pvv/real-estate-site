@@ -8,6 +8,17 @@ const adverts = api.injectEndpoints({
       query: () => '/adverts/user',
       providesTags: (result) => provideListTagsById(result, "Adverts"),
     }),
+    getAdvertById: build.query({
+      query: (id) => `/adverts/${id}`,
+      providesTags: (_, __, id) => [{ type: "Adverts", id }],
+    }),
+    searchAdverts: build.query({
+      query: (searchParams) => ({
+        url: '/adverts/search',
+        params: searchParams,
+      }),
+      providesTags: (result) => provideListTagsById(result, "Adverts"),
+    }),
     createAdvert: build.mutation({
       query(requestData) {
         return {
@@ -32,6 +43,8 @@ const adverts = api.injectEndpoints({
 
 export const {
   useGetUserAdvertsQuery,
+  useGetAdvertByIdQuery,
+  useSearchAdvertsQuery,
   useCreateAdvertMutation,
   useDeleteAdvertMutation,
 } = adverts
