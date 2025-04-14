@@ -10,6 +10,7 @@ import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
 
 import styles from "./AdvertCard.module.css";
 import { arrayToString } from "@/utils/arrayToString.js";
+import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
 
 export function AdvertCard(props) {
 	const { like = true, link, advert, actionSlot } = props;
@@ -40,7 +41,7 @@ export function AdvertCard(props) {
 		? arrayToString([city, streetDisplay, house_number])
 		: arrayToString([state, district])
 
-	const floorTooltip = propertyTypeId === 2 ? "Кількість поверхів" : "Поверх";
+	const floorTooltip = propertyTypeId === ADVERT_PROPERTY_TYPES.HOUSE ? "Кількість поверхів" : "Поверх";
 	const floorDisplay = building_levels ? `${floor} з ${building_levels}` : floor;
 
 	const pricePerMeter = Math.round(price_usd / area);

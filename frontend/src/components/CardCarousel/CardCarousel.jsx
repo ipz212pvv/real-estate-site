@@ -8,6 +8,7 @@ export function CardCarousel({ items }) {
     <Carousel
       className={styles.carousel}
       infinite={false}
+      speed={300}
       slidesToShow={3}
       responsive={[
         {

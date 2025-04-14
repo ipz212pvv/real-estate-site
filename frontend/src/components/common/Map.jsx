@@ -5,7 +5,7 @@ import "@maptiler/sdk/dist/maptiler-sdk.css";
 maptilersdk.config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
 export function Map(props) {
-  const { onLoad, options, style = {}, className } = props;
+  const { onLoad, options = {}, style = {}, className } = props;
   const mapContainer = useRef(null);
   const map = useRef(null);
 

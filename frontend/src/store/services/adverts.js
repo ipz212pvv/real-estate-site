@@ -29,6 +29,16 @@ const adverts = api.injectEndpoints({
       },
       invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
     }),
+    editAdvert: build.mutation({
+      query(id, requestData) {
+        return {
+          url: `/adverts/${id}`,
+          method: "PATCH",
+          data: requestData,
+        }
+      },
+      invalidatesTags: (_, __, id) => [{ type: 'Adverts', id }],
+    }),
     deleteAdvert: build.mutation({
       query(id) {
         return {
@@ -36,7 +46,7 @@ const adverts = api.injectEndpoints({
           method: "DELETE",
         }
       },
-      invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
+      invalidatesTags: (_, __, id) => [{ type: 'Adverts', id }],
     }),
   }),
 })
@@ -46,5 +56,6 @@ export const {
   useGetAdvertByIdQuery,
   useSearchAdvertsQuery,
   useCreateAdvertMutation,
+  useEditAdvertMutation,
   useDeleteAdvertMutation,
 } = adverts

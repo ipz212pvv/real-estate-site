@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Flex, message, notification, Typography, Upload } from "antd";
+import { Button, Flex, notification, Typography, Upload } from "antd";
 import { GoPlus } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { FaTrash } from "react-icons/fa";
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { Image } from "@/components/common/Image.jsx";
 
+import { validateImageFormat, validateImageSize } from "@/utils/imageValidation.js";
 import { MAX_AVATAR_SIZE } from "@/config/constants.js";
 import { useDeleteAvatarMutation, useUploadAvatarMutation } from "@/store/services/users.js";
 import styles from "./UploadAvatar.module.css";
@@ -17,17 +18,9 @@ export function UploadAvatar() {
   const [deleteAvatar, { isLoading: isDeleting, error: deleteError }] = useDeleteAvatarMutation();
 
   const beforeUpload = file => {
-    const isValidFormat = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isValidFormat = validateImageFormat(file);
+    const isValidSize = validateImageSize(file, MAX_AVATAR_SIZE);
 
-    if (!isValidFormat) {
-      message.error('Доступні формати фото PNG, JPG або JPEG');
-    }
-
-    const isValidSize = file.size <= MAX_AVATAR_SIZE;
-
-    if (!isValidSize) {
-      message.error('Максимальний розмір фото 2MB');
-    }
     return isValidFormat && isValidSize;
   };
 

@@ -4,8 +4,7 @@ import "@maptiler/geocoding-control/style.css";
 
 import { Map } from "@/components/common/Map.jsx";
 
-export function FormMapLocationSelect({ onChange }) {
-
+export function FormMapLocationSelect({ initialValue, onChange }) {
   const handleMapLoad = (mapInstance) => {
     let marker = null;
 
@@ -14,10 +13,8 @@ export function FormMapLocationSelect({ onChange }) {
       country: "ua",
     });
 
-    mapInstance.addControl(gc, 'top-left');
-
-    mapInstance.on('click', (e) => {
-      const { lng, lat } = e.lngLat;
+    const addMarker = (lngLat) => {
+      const { lng, lat } = lngLat;
 
       if(marker) {
         marker.remove();
@@ -28,6 +25,16 @@ export function FormMapLocationSelect({ onChange }) {
       })
       .setLngLat([lng, lat])
       .addTo(mapInstance);
+    }
+
+    if (initialValue) {
+      addMarker(initialValue);
+    }
+
+    mapInstance.addControl(gc, 'top-left');
+
+    mapInstance.on('click', (e) => {
+      addMarker(e.lngLat);
 
       onChange(e.lngLat);
     })
