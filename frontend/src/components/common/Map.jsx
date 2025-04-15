@@ -31,6 +31,11 @@ export function Map(props) {
         onLoad(map.current)
       });
     }
+
+    return () => {
+      map.current.remove();
+      map.current = null;
+    }
   }, [])
 
   return (

@@ -37,11 +37,16 @@ function formatCurrency(number) {
 export function AdvertsMap() {
   const [selectedRealtyId, setSelectedRealtyId] = useState(null);
   const { searchParams } = useSearchParams();
-  const { data: adverts, isLoading } = useSearchAdvertsQuery(searchParams);
+
+  const { data: advertsResponse, isLoading } = useSearchAdvertsQuery(searchParams);
   const { data: advert, isFetching: loadingAdvert } = useGetAdvertByIdQuery(
     selectedRealtyId,
     { skip: !selectedRealtyId, refetchOnMountOrArgChange: true }
   );
+
+  if (isLoading) return <Loading />;
+
+  const { adverts } = advertsResponse;
 
   const handleMapLoad = (mapInstance) => {
     let hoveredPointId = null;
@@ -179,8 +184,6 @@ export function AdvertsMap() {
       mapInstance.getCanvas().style.cursor = '';
     });
   }
-
-  if (isLoading) return <Loading />;
 
   return (
     <Space style={{ width: "100%" }} size="middle" direction="vertical">

@@ -14,7 +14,7 @@ export function ProfileAdvertsEdit() {
 	const [editAdvert] = useEditAdvertMutation();
 
 	const onFinish = (formData, onFinal) => {
-		editAdvert(formData)
+		editAdvert({ advertId: id, data: formData })
 			.unwrap()
 			.then(() => navigate(`/profile/adverts`))
 			.catch(err => {

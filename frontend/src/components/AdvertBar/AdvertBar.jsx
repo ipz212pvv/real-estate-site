@@ -48,8 +48,7 @@ export function AdvertBar(props) {
   const floorDisplay = building_levels ? `${floor} з ${building_levels}` : floor;
 
   const pricePerMeter = Math.round(price_usd / area);
-
-  const imageList = advertImages.map(({ imageUrl }) => imageUrl);
+  const imageList = advertImages?.map(({ imageUrl }) => imageUrl);
 
   return (
     <Link to={link}>

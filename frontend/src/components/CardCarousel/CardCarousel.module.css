@@ -2,22 +2,18 @@
     display: flex;
     align-items: center;
 
-    :global(.slick-prev),
-    :global(.slick-next) {
+    :global(& > .slick-prev),
+    :global(& > .slick-next) {
         position: initial;
         transform: initial;
     }
 
-    :global(.slick-prev) {
+    :global(& > .slick-prev) {
         left: -40px;
     }
 
-    :global(.slick-next) {
+    :global(& > .slick-next) {
         right: -40px;
-    }
-
-    :global(.ant-image) {
-        width: 100%;
     }
 }
 

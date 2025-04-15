@@ -4,9 +4,9 @@ import { MdOutlineBed } from "react-icons/md";
 import { PiStairs } from "react-icons/pi";
 import { RiCustomSize } from "react-icons/ri";
 
-import { Image } from "@/components/common/Image.jsx";
 import { Tooltip } from "@/components/common/Tooltip.jsx";
 import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
+import { ImageCarousel } from "@/components/ImageCarousel/ImageCarousel.jsx";
 
 import styles from "./AdvertCard.module.css";
 import { arrayToString } from "@/utils/arrayToString.js";
@@ -15,7 +15,7 @@ import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
 export function AdvertCard(props) {
 	const { like = true, link, advert, actionSlot } = props;
 	const {
-		image,
+		advertImages,
 		price_usd,
 		area,
 		room,
@@ -45,6 +45,7 @@ export function AdvertCard(props) {
 	const floorDisplay = building_levels ? `${floor} з ${building_levels}` : floor;
 
 	const pricePerMeter = Math.round(price_usd / area);
+	const imageList = advertImages?.map(({ imageUrl }) => imageUrl);
 
 	return (
 		<Link to={link}>
@@ -55,7 +56,7 @@ export function AdvertCard(props) {
 					</Flex>
 				)}
 				<Badge.Ribbon placement="start" text={propertyTypeName}>
-					<Image src={image} style={{ aspectRatio: "4 / 2.8", borderRadius: "8px 8px 0 0" }} />
+					<ImageCarousel images={imageList} />
 				</Badge.Ribbon>
 				<div className={styles["card-description"]}>
 					<Flex gap="small" align="center">

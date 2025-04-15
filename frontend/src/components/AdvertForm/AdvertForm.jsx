@@ -52,7 +52,7 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 
 	if (advertTypesLoading || advertPropertyTypesLoading || benefitsLoading) return <Loading/>
 
-	const handleFinish = async (formData) => {
+	const handleFinish = (formData) => {
 		const { priceCurrency, price, location } = formData;
 
 		if(priceCurrency === "usd") formData.price_usd = price;

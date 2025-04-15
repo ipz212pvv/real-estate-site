@@ -24,6 +24,18 @@ const ownerMiddleware = require("../middlewares/ownerMiddleware");
  *           type: integer
  *         description: Filter by floor
  *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Page number for pagination (e.g. 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Number of adverts per page (e.g. 10)
+ *       - in: query
  *         name: room
  *         schema:
  *           type: integer
@@ -137,9 +149,25 @@ router.get('/user',authMiddleware,  async (req, res) => {
  * /api/adverts:
  *   get:
  *     summary: Retrieve all adverts
- *     description: Fetches a list of all adverts from the database.
+ *     description: |
+ *       Fetches a list of all adverts from the database.
+ *       - If `page` and `limit` are not provided, all adverts will be returned.
+ *       - If `page` and `limit` are specified, paginated results will be returned.
  *     tags:
  *       - adverts
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Page number for pagination (e.g. 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Number of adverts per page (e.g. 10)
  *     responses:
  *       200:
  *         description: List of adverts
@@ -148,12 +176,13 @@ router.get('/user',authMiddleware,  async (req, res) => {
  */
 router.get('/', async (req, res) => {
   try {
-    const adverts = await repository.getAllAdverts();
+    const adverts = await repository.getAllAdverts({}, req.query);
     res.status(200).json(adverts);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
+
 
 /**
  * @swagger
@@ -287,6 +316,12 @@ router.post('/', authMiddleware, async (req, res) => {
  *                 format: float
  *                 example: 80.0
  *               room:
+ *                 type: integer
+ *                 example: 2
+ *               propertyTypeId:
+ *                 type: integer
+ *                 example: 2
+ *               typeId:
  *                 type: integer
  *                 example: 2
  *               floor:

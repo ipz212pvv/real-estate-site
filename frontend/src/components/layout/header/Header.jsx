@@ -9,6 +9,7 @@ import { FiMenu } from "react-icons/fi";
 
 import { matchPathname } from "@/utils/matchPathname.js";
 import styles from "./Header.module.css";
+import { ADVERT_TYPES } from "@/config/constants.js";
 
 const NAV_ITEMS = [
   {
@@ -17,15 +18,15 @@ const NAV_ITEMS = [
   },
   {
     label: "Купівля",
-    path: "/buy?typeId=1",
+    path: `/buy?typeId=${ADVERT_TYPES.SELL}`,
   },
   {
     label: "Оренда",
-    path: "/rent?typeId=2",
+    path: `/rent?typeId=${ADVERT_TYPES.RENT}`,
   },
   {
     label: "Новобудови",
-    path: "/new-buildings?typeId=3",
+    path: `/new-buildings?typeId=${ADVERT_TYPES.NEW_BUILDING}`,
   }
 ];
 

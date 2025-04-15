@@ -11,6 +11,12 @@ export const ADVERT_PROPERTY_TYPES = {
   COMMERCIAL_ESTATE: 5
 }
 
+export const ADVERT_TYPES = {
+  RENT: 1,
+  SELL: 2,
+  NEW_BUILDING: 3,
+}
+
 export const MAX_AVATAR_SIZE = 1024 * 1024 * 2;
 export const MAX_ADVERT_IMAGE_SIZE = 1024 * 1024 * 10;
 export const AVAILABLE_IMAGE_TYPES = ['image/jpeg', 'image/png'];

@@ -5,7 +5,7 @@ import { Image } from "@/components/common/Image.jsx";
 
 import styles from "./ImageCarousel.module.css";
 
-export function ImageCarousel({ images, props }) {
+export function ImageCarousel({ images = [], props }) {
 
   if (images.length === 0) {
     images.push(null);
