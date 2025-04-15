@@ -1,4 +1,4 @@
-import { Space, Typography } from "antd";
+import { Pagination, Space, Typography } from "antd";
 import { useState } from "react";
 import { Marker } from "@maptiler/sdk";
 
@@ -36,9 +36,12 @@ function formatCurrency(number) {
 
 export function AdvertsMap() {
   const [selectedRealtyId, setSelectedRealtyId] = useState(null);
-  const { searchParams } = useSearchParams();
+  const { searchParams, updateSearchParams } = useSearchParams();
 
-  const { data: advertsResponse, isLoading } = useSearchAdvertsQuery(searchParams);
+  const { data: advertsResponse, isLoading } = useSearchAdvertsQuery(
+    { ...searchParams, limit: 20 },
+    { refetchOnMountOrArgChange: true }
+  );
   const { data: advert, isFetching: loadingAdvert } = useGetAdvertByIdQuery(
     selectedRealtyId,
     { skip: !selectedRealtyId, refetchOnMountOrArgChange: true }
@@ -46,7 +49,7 @@ export function AdvertsMap() {
 
   if (isLoading) return <Loading />;
 
-  const { adverts } = advertsResponse;
+  const { total, adverts } = advertsResponse;
 
   const handleMapLoad = (mapInstance) => {
     let hoveredPointId = null;
@@ -199,6 +202,13 @@ export function AdvertsMap() {
       </div>
       <Typography.Title level={3} style={{ marginBottom: 0 }}>Оголошення</Typography.Title>
       <AdvertList adverts={adverts} />
+      <Pagination
+        onChange={(page) => updateSearchParams("page", page)}
+        align="center"
+        hideOnSinglePage={true}
+        defaultCurrent={1}
+        total={total}
+      />
     </Space>
   )
 }

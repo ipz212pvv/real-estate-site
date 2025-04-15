@@ -10,7 +10,7 @@ export function useSearchParams(initialValue) {
     setSearchParams(prevParams => {
       let searchParams = Object.fromEntries(prevParams);
 
-      if (Array.isArray(value) ? !value.length : (value ?? false)) {
+      if (!(Array.isArray(value) ? value.length : value ?? true)) {
         delete searchParams[key];
       } else {
         searchParams[key] = Array.isArray(value) ? JSON.stringify(value) : value;
