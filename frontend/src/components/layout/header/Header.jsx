@@ -45,7 +45,7 @@ export function Header() {
     })
   }, [location]);
 
-  const selectedKeys = activeLink ? [activeLink.toString()] : [];
+  const selectedKeys = activeLink !== null ? [activeLink.toString()] : [];
 
   const menuItems = useMemo(() => NAV_ITEMS.map(({ label, path }, i) => ({
     key: i.toString(),

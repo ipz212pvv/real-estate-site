@@ -55,7 +55,7 @@ export function AdvertBar(props) {
       <Card styles={{ body: { padding: 0 } }} hoverable>
         <Row>
           <Col className={styles["slider-col"]} xs={{ span: 24 }} md={{ flex: "400px" }}>
-            <Badge.Ribbon rootClassName={styles["image-wrapper"]} placement="start" text={propertyTypeName}>
+            <Badge.Ribbon placement="start" text={propertyTypeName}>
               <ImageCarousel images={imageList} />
             </Badge.Ribbon>
           </Col>

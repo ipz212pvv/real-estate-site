@@ -38,7 +38,7 @@ export function AdvertsMap() {
   const [selectedRealtyId, setSelectedRealtyId] = useState(null);
   const { searchParams, updateSearchParams } = useSearchParams();
 
-  const { data: advertsResponse, isLoading } = useSearchAdvertsQuery(
+  const { data: advertsResponse, isLoading, isFetching } = useSearchAdvertsQuery(
     { ...searchParams, limit: 20 },
     { refetchOnMountOrArgChange: true }
   );
@@ -201,12 +201,15 @@ export function AdvertsMap() {
         <Map className={styles.map} style={{ height: 600 }} onLoad={handleMapLoad}/>
       </div>
       <Typography.Title level={3} style={{ marginBottom: 0 }}>Оголошення</Typography.Title>
-      <AdvertList adverts={adverts} />
+      <div style={{ minHeight: 300 }}>
+        {isFetching ? <Loading /> : <AdvertList adverts={adverts} />}
+      </div>
       <Pagination
         onChange={(page) => updateSearchParams("page", page)}
         align="center"
         hideOnSinglePage={true}
         defaultCurrent={1}
+        defaultPageSize={20}
         total={total}
       />
     </Space>

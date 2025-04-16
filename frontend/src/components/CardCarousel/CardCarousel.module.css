@@ -2,6 +2,10 @@
     display: flex;
     align-items: center;
 
+    :global(.slick-list) {
+        flex: 1;
+    }
+
     :global(& > .slick-prev),
     :global(& > .slick-next) {
         position: initial;
@@ -15,21 +19,4 @@
     :global(& > .slick-next) {
         right: -40px;
     }
-}
-
-.card {
-    margin: 8px;
-    border-radius: 8px;
-    transition: transform 0.2s;
-
-    &:hover {
-        transform: scale(1.02);
-    }
-}
-
-.card-description {
-    border: 1px solid rgba(0,0,0,0.1);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    padding: 8px 8px 16px 8px;
 }

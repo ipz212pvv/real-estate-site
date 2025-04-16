@@ -30,10 +30,10 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 		data: advertPropertyTypes = [],
 		isLoading: advertPropertyTypesLoading
 	} = useGetAdvertPropertyTypesQuery();
-	const {
+	/*const {
 		data: benefits = [],
 		isLoading: benefitsLoading
-	} = useGetAdvertPropertyTypesQuery();
+	} = useGetAdvertPropertyTypesQuery();*/
 
 	const initialValues = {
 		priceCurrency: "usd",
@@ -50,7 +50,7 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 		label: name,
 	})), [advertTypes]);
 
-	if (advertTypesLoading || advertPropertyTypesLoading || benefitsLoading) return <Loading/>
+	if (advertTypesLoading || advertPropertyTypesLoading) return <Loading/>
 
 	const handleFinish = (formData) => {
 		const { priceCurrency, price, location } = formData;
