@@ -91,6 +91,7 @@ const getAllAdverts = async (where = {}, query = {}) => {
             where,
             include: include,
             order: [['createdAt', 'DESC']],
+            subQuery: false,
         };
 
         if (usePagination) {

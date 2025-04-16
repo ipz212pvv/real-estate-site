@@ -6,11 +6,11 @@ const adverts = api.injectEndpoints({
   endpoints: (build) => ({
     getLastAdverts: build.query({
       query: () => '/adverts?limit=10',
-      providesTags: (result) => provideListTagsById(result.adverts, "Adverts"),
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
     getUserAdverts: build.query({
       query: () => '/adverts/user',
-      providesTags: (result) => provideListTagsById(result.adverts, "Adverts"),
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
     getAdvertById: build.query({
       query: (id) => `/adverts/${id}`,
@@ -21,7 +21,7 @@ const adverts = api.injectEndpoints({
         url: '/adverts/search',
         params: searchParams,
       }),
-      providesTags: (result) => provideListTagsById(result.adverts, "Adverts"),
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
     createAdvert: build.mutation({
       query(requestData) {

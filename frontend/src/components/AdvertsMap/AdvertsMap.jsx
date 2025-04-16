@@ -1,5 +1,5 @@
 import { Pagination, Space, Typography } from "antd";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Marker } from "@maptiler/sdk";
 
 import { Map } from "@/components/common/Map.jsx";
@@ -12,15 +12,19 @@ import { useSearchParams } from "@/hooks/useSearchParams.js";
 import styles from "./AdvertsMap.module.css";
 
 function formatSourceFeatures(data) {
-  return data.map(({ id, locationForAdvert: { lat, lon }, price_usd }) => ({
+  const features = data.map(({ id, locationForAdvert: { lat, lon } }) => ({
     id,
     type: 'Feature',
     geometry: {
       type: 'Point',
       coordinates: [lon, lat]
     },
-    properties: { 'price': `${price_usd} $` }
-  }))
+  }));
+
+  return {
+    'type': 'FeatureCollection',
+    'features': features
+  }
 }
 
 function formatCurrency(number) {
@@ -38,6 +42,11 @@ export function AdvertsMap() {
   const [selectedRealtyId, setSelectedRealtyId] = useState(null);
   const { searchParams, updateSearchParams } = useSearchParams();
 
+  const map = useRef(null);
+  const markers = useRef([]);
+  const hoveredPointId = useRef(null);
+  const activePointId = useRef(null);
+
   const { data: advertsResponse, isLoading, isFetching } = useSearchAdvertsQuery(
     { ...searchParams, limit: 20 },
     { refetchOnMountOrArgChange: true }
@@ -47,52 +56,87 @@ export function AdvertsMap() {
     { skip: !selectedRealtyId, refetchOnMountOrArgChange: true }
   );
 
-  if (isLoading) return <Loading />;
+  const { total = 0, adverts = [] } = useMemo(() => advertsResponse || {}, [advertsResponse]);
 
-  const { total, adverts } = advertsResponse;
+  const selectRealty = (id) => {
+    const selectedMarker = document.querySelector('.property-marker--selected');
+    const marker = document.querySelector(`.property-marker[data-marker-id="${id}"]`);
 
-  const handleMapLoad = (mapInstance) => {
-    let hoveredPointId = null;
-    let activePointId = null;
+    selectedMarker?.classList?.remove('property-marker--selected');
 
-    const selectRealty = (id) => {
-      const selectedMarker = document.querySelector('.property-marker--selected');
-      const marker = document.querySelector(`.property-marker[data-marker-id="${id}"]`);
-
-      selectedMarker?.classList?.remove('property-marker--selected');
-
-      if(activePointId !== null) {
-        mapInstance.setFeatureState(
-          { source: 'property', id: activePointId },
-          { active: false }
-        );
-      }
-
-      activePointId = id
-      setSelectedRealtyId(id);
-
-      marker.classList.add('property-marker--selected');
-
-      mapInstance.setFeatureState(
-        { source: 'property', id: activePointId },
-        { active: true }
+    if(activePointId.current !== null) {
+      map.current.setFeatureState(
+        { source: 'property', id: activePointId.current },
+        { active: false }
       );
     }
 
-    //Property source
+    activePointId.current = id
+    setSelectedRealtyId(id);
+
+    marker.classList.add('property-marker--selected');
+
+    map.current.setFeatureState(
+      { source: 'property', id: activePointId.current },
+      { active: true }
+    );
+  }
+
+  const removeAllMarkers = () => {
+    markers.current.forEach(marker => marker.remove());
+    markers.current = [];
+  }
+
+  const createAdvertsMarkers = () => {
+    adverts.forEach(({ id, locationForAdvert, price_usd }) => {
+      const { lat, lon } = locationForAdvert;
+      const coordinates = [lon, lat];
+      const marker = document.createElement('div');
+
+      marker.className = 'property-marker';
+      marker.textContent = formatCurrency(price_usd);
+      marker.dataset.markerId = id;
+
+      marker.addEventListener('click', () => {
+        selectRealty(id);
+
+        map.current.flyTo({
+          center: coordinates,
+        });
+      })
+
+      const markerInstance = new Marker({ element: marker, anchor: "bottom", offset: [0, -5] })
+        .setLngLat(coordinates)
+        .addTo(map.current);
+
+      markers.current.push(markerInstance);
+    })
+  }
+
+  useEffect(() => {
+    if (map.current) {
+      removeAllMarkers();
+      map.current.getSource("property").setData(formatSourceFeatures(adverts));
+      createAdvertsMarkers()
+    }
+  }, [adverts])
+
+  if (isLoading) return <Loading />;
+
+  const handleMapLoad = (mapInstance) => {
+    map.current = mapInstance;
+
     mapInstance.addSource('property', {
       'type': 'geojson',
-      'data': {
-        'type': 'FeatureCollection',
-        'features': formatSourceFeatures(adverts)
-      }
+      'data': formatSourceFeatures(adverts)
     });
+
+    createAdvertsMarkers()
 
     /*mapInstance.on('click', (e) => {
       console.log(mapInstance.queryRenderedFeatures(e.point))
     })*/
 
-    //Property points
     mapInstance.addLayer({
       id: 'property',
       type: 'circle',
@@ -120,30 +164,6 @@ export function AdvertsMap() {
       }
     });
 
-    //Property points marker
-    adverts.forEach(({ id, locationForAdvert, price_usd }) => {
-      const { lat, lon } = locationForAdvert;
-      const coordinates = [lon, lat];
-      const marker = document.createElement('div');
-
-      marker.className = 'property-marker';
-      marker.textContent = formatCurrency(price_usd);
-      marker.dataset.markerId = id;
-
-      marker.addEventListener('click', () => {
-        selectRealty(id, coordinates);
-
-        mapInstance.flyTo({
-          center: coordinates,
-        });
-      })
-
-      new Marker({ element: marker, anchor: "bottom", offset: [0, -5] })
-        .setLngLat(coordinates)
-        .addTo(mapInstance);
-    })
-
-    //Select realty
     mapInstance.on('click', 'property', (e) => {
       const realty = e.features[0];
       const realtyId = realty.id;
@@ -158,16 +178,16 @@ export function AdvertsMap() {
     mapInstance.on('mouseenter', 'property', (e) => {
       const realty = e.features[0];
 
-      if (hoveredPointId !== null) {
+      if (hoveredPointId.current !== null) {
         mapInstance.setFeatureState(
-          { source: 'property', id: hoveredPointId },
+          { source: 'property', id: hoveredPointId.current },
           { hover: false }
         );
       }
 
-      hoveredPointId = realty.id;
+      hoveredPointId.current = realty.id;
       mapInstance.setFeatureState(
-        { source: 'property', id: hoveredPointId },
+        { source: 'property', id: hoveredPointId.current },
         { hover: true }
       );
 
@@ -175,14 +195,14 @@ export function AdvertsMap() {
     });
 
     mapInstance.on('mouseleave', 'property', () => {
-      if (hoveredPointId !== null) {
+      if (hoveredPointId.current !== null) {
         mapInstance.setFeatureState(
-          { source: 'property', id: hoveredPointId },
+          { source: 'property', id: hoveredPointId.current },
           { hover: false }
         );
       }
 
-      hoveredPointId = null;
+      hoveredPointId.current = null;
 
       mapInstance.getCanvas().style.cursor = '';
     });

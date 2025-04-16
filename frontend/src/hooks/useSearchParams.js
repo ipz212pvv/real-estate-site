@@ -6,11 +6,11 @@ export function useSearchParams(initialValue) {
 
   const searchParams = Object.fromEntries(urlSearchParams);
 
-  const updateSearchParams = (key, value) => {
+  const updateSearchParams = (key, value = null) => {
     setSearchParams(prevParams => {
       let searchParams = Object.fromEntries(prevParams);
 
-      if (!(Array.isArray(value) ? value.length : value ?? true)) {
+      if (Array.isArray(value) ? !value.length : value === null) {
         delete searchParams[key];
       } else {
         searchParams[key] = Array.isArray(value) ? JSON.stringify(value) : value;
