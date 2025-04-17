@@ -9,6 +9,7 @@ import { useGetAdvertTypesQuery } from "@/store/services/advert-types.js";
 import { useGetAdvertPropertyTypesQuery } from "@/store/services/advert-property-types.js";
 import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
 import { AdvertBenefitsSelect } from "@/components/AdvertBenefitsSelect/AdvertBenefitsSelect.jsx";
+import { useGetBenefitsQuery } from "@/store/services/benefits.js";
 
 const suffixSelector = (
 	<Form.Item name="priceCurrency" noStyle>
@@ -30,10 +31,10 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 		data: advertPropertyTypes = [],
 		isLoading: advertPropertyTypesLoading
 	} = useGetAdvertPropertyTypesQuery();
-	/*const {
-		data: benefits = [],
-		isLoading: benefitsLoading
-	} = useGetAdvertPropertyTypesQuery();*/
+	const {
+	 	data: benefits = [],
+	 	isLoading: benefitsLoading
+	} = useGetBenefitsQuery();
 
 	const initialValues = {
 		priceCurrency: "usd",
@@ -48,9 +49,14 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 	const advertPropertyTypeOptions = useMemo(() => advertPropertyTypes.map(({ id, name }) => ({
 		value: id,
 		label: name,
-	})), [advertTypes]);
+	})), [advertPropertyTypes]);
 
-	if (advertTypesLoading || advertPropertyTypesLoading) return <Loading/>
+	const benefitsOptions = useMemo(() => benefits.map(({ id, name }) => ({
+		value: id,
+		label: name,
+	})), [benefits]);
+
+	if (advertTypesLoading || advertPropertyTypesLoading || benefitsLoading) return <Loading/>
 
 	const handleFinish = (formData) => {
 		const { priceCurrency, price, location } = formData;
@@ -165,7 +171,7 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 				{edit && (
 					<Col span={24}>
 						<Form.Item label="Переваги">
-							<AdvertBenefitsSelect />
+							<AdvertBenefitsSelect initialValue={initialValues?.benefits} options={benefitsOptions} />
 						</Form.Item>
 					</Col>
 				)}
