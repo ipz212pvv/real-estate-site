@@ -71,6 +71,15 @@ export function AdvertsMap() {
     }
   };
 
+  const unselectRealty = () => {
+    const selectedMarker = document.querySelector('.property-marker--selected');
+    selectedMarker?.classList?.remove('property-marker--selected');
+
+    updateFeatureState(activePointId.current, { active: false });
+    activePointId.current = null;
+    setSelectedRealtyId(null);
+  }
+
   const handleMapClick = (e) => {
     const target = e.originalEvent.target;
     const isMarkerClick = target?.classList?.contains('property-marker');
@@ -79,12 +88,7 @@ export function AdvertsMap() {
       const features = map.current.queryRenderedFeatures(e.point, { layers: ['property'] });
 
       if (features.length === 0) {
-        const selectedMarker = document.querySelector('.property-marker--selected');
-        selectedMarker?.classList?.remove('property-marker--selected');
-
-        updateFeatureState(activePointId.current, { active: false });
-        activePointId.current = null;
-        setSelectedRealtyId(null);
+        unselectRealty();
 
         if (!screen.md) setOpenModal(false);
       }
@@ -156,6 +160,11 @@ export function AdvertsMap() {
     mapInstance.on('mouseleave', 'property', e => handlePropertyHover(e, false));
   };
 
+  const closeRealtyPopup = () => {
+    setOpenModal(false);
+    unselectRealty()
+  }
+
   useEffect(() => {
     if (map.current) {
       removeAllMarkers();
@@ -173,7 +182,7 @@ export function AdvertsMap() {
           !screen.md ? (
             <AdvertModal
               open={openModal}
-              onClose={() => setOpenModal(false)}
+              onClose={closeRealtyPopup}
               loading={loadingAdvert}
               advert={advert}
             />

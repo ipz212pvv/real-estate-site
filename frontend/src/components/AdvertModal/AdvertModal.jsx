@@ -1,24 +1,17 @@
-import { Button, Modal } from "antd";
-import { IoClose } from "react-icons/io5";
+import { Modal } from "antd";
 
 import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
+
+import styles from "./AdvertModal.module.css";
 
 export function AdvertModal({ open, onClose, advert, loading }) {
 	return (
 		<Modal
-			styles={{
-				content: {
-					paddingTop: 40,
-					backgroundColor: "transparent",
-					boxShadow: "none"
-				}
-			}}
+			className={styles.modal}
+			classNames={{ content: styles["modal-content"] }}
 			open={open}
 			onCancel={onClose}
 			loading={loading}
-			closeIcon={
-				<Button type="primary" icon={<IoClose size={24} />}/>
-			}
 			footer={null}
 		>
 			<AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
