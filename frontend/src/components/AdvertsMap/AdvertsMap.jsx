@@ -241,6 +241,7 @@ export function AdvertsMap() {
             <Modal
               styles={{ content: { paddingTop: 40, backgroundColor: "transparent", boxShadow: "none" } }}
               open={openModal}
+              onCancel={() => setOpenModal(false)}
               loading={loadingAdvert}
               footer={null}
             >
