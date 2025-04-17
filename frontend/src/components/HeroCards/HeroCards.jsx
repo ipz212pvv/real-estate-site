@@ -4,6 +4,7 @@ import { Card, Flex, Typography } from "antd";
 import { Apartment, ForSale, Rent } from "@/components/icons";
 
 import styles from "./HeroCards.module.css";
+import { ADVERT_TYPES } from "@/config/constants.js";
 
 const { Title } = Typography;
 
@@ -11,17 +12,17 @@ const CARDS = [
   {
     label: "Купівля",
     icon: <ForSale/>,
-    path: "/buy"
+    path: `/buy?typeId=${ADVERT_TYPES.SELL}`
   },
   {
     label: "Оренда",
     icon: <Rent/>,
-    path: "/rent"
+    path: `/rent?typeId=${ADVERT_TYPES.RENT}`
   },
   {
     label: "Новобудови",
     icon: <Apartment/>,
-    path: "/new-buildings"
+    path: `/new-buildings?typeId=${ADVERT_TYPES.NEW_BUILDING}`
   }
 ]
 

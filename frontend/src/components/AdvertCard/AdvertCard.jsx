@@ -43,7 +43,7 @@ export function AdvertCard(props) {
 		: arrayToString([state, district])
 
 	const floorTooltip = propertyTypeId === ADVERT_PROPERTY_TYPES.HOUSE ? "Кількість поверхів" : "Поверх";
-	const floorDisplay = building_levels ? `${floor} з ${building_levels}` : floor;
+	const floorDisplay = propertyTypeId === ADVERT_PROPERTY_TYPES.FLAT && building_levels ? `${floor} з ${building_levels}` : floor;
 
 	const pricePerMeter = Math.round(price_usd / area);
 	const imageList = advertImages?.map(({ imageUrl }) => imageUrl);
