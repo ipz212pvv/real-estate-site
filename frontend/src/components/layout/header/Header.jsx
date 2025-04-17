@@ -9,23 +9,28 @@ import { FiMenu } from "react-icons/fi";
 
 import { matchPathname } from "@/utils/matchPathname.js";
 import styles from "./Header.module.css";
+import { ADVERT_TYPES } from "@/config/constants.js";
 
 const NAV_ITEMS = [
   {
     label: "Головна",
     path: "/",
+    url: "/"
   },
   {
     label: "Купівля",
-    path: "/buy",
+    path: `/buy?typeId=${ADVERT_TYPES.SELL}`,
+    url: "/buy"
   },
   {
     label: "Оренда",
-    path: "/rent",
+    path: `/rent?typeId=${ADVERT_TYPES.RENT}`,
+    url: "/rent"
   },
   {
     label: "Новобудови",
-    path: "/new-buildings",
+    path: `/new-buildings?typeId=${ADVERT_TYPES.NEW_BUILDING}`,
+    url: "/new-buildings"
   }
 ];
 
@@ -37,14 +42,14 @@ export function Header() {
   const user = useSelector(state => state.auth.user);
 
   useEffect(() => {
-    NAV_ITEMS.forEach(({ path }, i) => {
-      if(matchPathname(path, { strict: true })) {
+    NAV_ITEMS.forEach(({ url }, i) => {
+      if(matchPathname(url, { strict: true })) {
         setActiveLink(i);
       }
     })
   }, [location]);
 
-  const selectedKeys = activeLink ? [activeLink.toString()] : [];
+  const selectedKeys = activeLink !== null ? [activeLink.toString()] : [];
 
   const menuItems = useMemo(() => NAV_ITEMS.map(({ label, path }, i) => ({
     key: i.toString(),

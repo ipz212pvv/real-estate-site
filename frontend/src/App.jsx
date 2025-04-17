@@ -8,6 +8,9 @@ import { Registration } from "@/pages/Registration.jsx";
 import { Profile } from "@/pages/Profile.jsx";
 import { ProfileAdverts } from "@/pages/ProfileAdverts.jsx";
 import { ProfileAdvertsCreate } from "@/pages/ProfileAdvertsCreate.jsx";
+import { ProfileAdvertsEdit } from "@/pages/ProfileAdvertsEdit.jsx";
+import { Buy } from "@/pages/Buy.jsx";
+import { Rent } from "@/pages/Rent.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
@@ -15,6 +18,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
+import { NewBuildings } from "@/pages/NewBuildings.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,15 +35,16 @@ function App() {
       <Routes>
         <Route path="/" element={<DefaultLayout />}>
           <Route index element={<Home />} />
-          <Route path="buy" element={<div>Buy</div>} />
-          <Route path="rent" element={<div>Rent</div>} />
-          <Route path="new-buildings" element={<div>New-buildings</div>} />
+          <Route path="buy" element={<Buy/>} />
+          <Route path="rent" element={<Rent/>} />
+          <Route path="new-buildings" element={<NewBuildings />} />
           <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
             <Route path="profile" element={<ProfileLayout />}>
               <Route index element={<Profile />} />
               <Route path="adverts">
                 <Route index element={<ProfileAdverts />}/>
                 <Route path="create" element={<ProfileAdvertsCreate />}/>
+                <Route path=":id/edit" element={<ProfileAdvertsEdit />}/>
               </Route>
             </Route>
           </Route>

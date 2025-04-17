@@ -8,6 +8,7 @@ const {getUsdToUahRate,calculatePrice} = require("../services/RateFetcherService
 const { Op } = require("sequelize");
 const { isExistData } = require("../utils/isExist");
 const { getDecodedTokenFromHeader } = require("../utils/token");
+const getPaginationParams = require("../utils/pagination");
 
 const include =  [
     getUserInclude("userOfAdvert"),
@@ -39,7 +40,7 @@ const updateAdvertImages = async (adverts) => {
 
 const getSearchedAdverts = async (query) => {
     try {
-        const { propertyTypeId,floor,title,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
+        const { limit,page,propertyTypeId,floor,title,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
         let where = {};
 
         if (typeId) where.typeId = typeId;
@@ -74,21 +75,39 @@ const getSearchedAdverts = async (query) => {
             where["$advertBenefitsForAdvert.benefitId$"] = { [Op.in]: benefitsArray.map(id => parseInt(id)) };
         }
 
-        return  await getAllAdverts(where);
+        return  await getAllAdverts(where,{limit,page});
 
     } catch (error) {
         throw new Error('Не вдалося отримати оголошення: ' + error.message);
     }
 };
 
-const getAllAdverts = async (where = {}) => {
+const getAllAdverts = async (where = {}, query = {}) => {
     try {
-        const adverts = await Advert.findAll({
+        const { page, limit, offset } = getPaginationParams(query);
+        const usePagination = query.page || query.limit;
+
+        const options = {
             where,
             include: include,
-        });
-        await updateAdvertImages(adverts);
-        return adverts;
+            order: [['createdAt', 'DESC']],
+            subQuery: false,
+        };
+
+        if (usePagination) {
+            options.limit = limit;
+            options.offset = offset;
+        }
+
+        const { count, rows } = await Advert.findAndCountAll(options);
+        await updateAdvertImages(rows);
+
+        return {
+            total: count,
+            page: usePagination ? page : 1,
+            pageSize: usePagination ? limit : count,
+            adverts: rows,
+        };
     } catch (error) {
         throw new Error('Не вдалося отримати оголошення: ' + error.message);
     }
@@ -168,7 +187,7 @@ const updateAdvertById = async (id, body) => {
             throw new Error('Оголошення не знайдено');
         }
 
-        let { price_uah, price_usd,area,title,description,floor,room } = body;
+        let {propertyTypeId,typeId, price_uah, price_usd,area,title,description,floor,room } = body;
         let updateFields = {};
 
         if (price_uah || price_usd) {
@@ -178,6 +197,8 @@ const updateAdvertById = async (id, body) => {
             updateFields.price_usd = price_usd;
         }
         if (area) updateFields.area = area;
+        if (propertyTypeId) updateFields.propertyTypeId = propertyTypeId;
+        if (typeId) updateFields.typeId = typeId;
         if (title) updateFields.title = title;
         if (description) updateFields.description = description;
         if (floor) updateFields.floor = floor;

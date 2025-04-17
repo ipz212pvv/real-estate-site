@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 
 maptilersdk.config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-export function Map(props) {
-  const { onLoad, options, style = {} } = props;
+export const Map = memo(function Map(props) {
+  const { onLoad, options = {}, style = {}, className } = props;
   const mapContainer = useRef(null);
   const map = useRef(null);
 
@@ -31,9 +31,14 @@ export function Map(props) {
         onLoad(map.current)
       });
     }
+
+    return () => {
+      map.current.remove();
+      map.current = null;
+    }
   }, [])
 
   return (
-    <div style={{ width: "100%", ...style }} ref={mapContainer}/>
+    <div className={className} style={{ width: "100%", borderRadius: 8, ...style }} ref={mapContainer}/>
   )
-}
+})

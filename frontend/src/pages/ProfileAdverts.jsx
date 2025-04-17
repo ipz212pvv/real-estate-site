@@ -10,7 +10,7 @@ import { useDeleteAdvertMutation, useGetUserAdvertsQuery } from "@/store/service
 
 export function ProfileAdverts() {
   const navigate = useNavigate();
-  const { data: adverts, isLoading } = useGetUserAdvertsQuery();
+  const { data: advertsResponse, isLoading } = useGetUserAdvertsQuery();
   const [deleteAdvert] = useDeleteAdvertMutation();
 
   const handleDelete = (id) => {
@@ -31,6 +31,8 @@ export function ProfileAdverts() {
   }
 
   if (isLoading) return <Loading />;
+
+  const { adverts } = advertsResponse
 
   return (
     <>

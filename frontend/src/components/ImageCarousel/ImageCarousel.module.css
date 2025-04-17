@@ -1,0 +1,9 @@
+.carousel {
+    :global(.slick-prev) {
+        left: 8px;
+    }
+
+    :global(.slick-next) {
+        right: 8px;
+    }
+}

@@ -1,12 +1,12 @@
-import { Carousel } from "@/components/common/Carousel.jsx";
+import { Carousel } from "@/components/common/Carousel/Carousel.jsx";
+import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
 import styles from "./CardCarousel.module.css";
-import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
 export function CardCarousel({ items }) {
   return (
     <Carousel
-      className={styles.carousel}
+      className={`card-carousel ${styles.carousel}`}
       infinite={false}
       speed={300}
       slidesToShow={3}
@@ -27,28 +27,11 @@ export function CardCarousel({ items }) {
         }
       ]}
     >
-      {[...Array(9)].map((_, i) => (
+      {items.map((advert, i) => (
         <AdvertCard
-          link="/"
+          link={`/adverts/${advert.id}`}
           key={i}
-          advert={{
-            id: 1,
-            image: "https://cdn.riastatic.com/photos/dom/photo/31350/3135037/313503780/313503780fm.webp",
-            price_usd: 80000,
-            area: 40,
-            room: 2,
-            floor: 2,
-            propertyTypeId: 1,
-            locationForAdvert: {
-              city: "Житомир",
-              road: "Андріївська",
-              house_number: 36,
-              building_levels: 10
-            },
-            advertPropertyTypeForAdvert: {
-              name: "Будинок"
-            }
-          }}
+          advert={advert}
         />
       ))}
     </Carousel>

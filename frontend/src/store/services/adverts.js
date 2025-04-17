@@ -4,9 +4,24 @@ import { provideListTagsById } from "@/utils/provideListTagsById.js";
 const adverts = api.injectEndpoints({
   tagTypes: ['Adverts'],
   endpoints: (build) => ({
+    getLastAdverts: build.query({
+      query: () => '/adverts?limit=10',
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
+    }),
     getUserAdverts: build.query({
       query: () => '/adverts/user',
-      providesTags: (result) => provideListTagsById(result, "Adverts"),
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
+    }),
+    getAdvertById: build.query({
+      query: (id) => `/adverts/${id}`,
+      providesTags: (_, __, id) => [{ type: "Adverts", id }],
+    }),
+    searchAdverts: build.query({
+      query: (searchParams) => ({
+        url: '/adverts/search',
+        params: searchParams,
+      }),
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
     createAdvert: build.mutation({
       query(requestData) {
@@ -18,6 +33,16 @@ const adverts = api.injectEndpoints({
       },
       invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
     }),
+    editAdvert: build.mutation({
+      query({ advertId, data }) {
+        return {
+          url: `/adverts/${advertId}`,
+          method: "PATCH",
+          data,
+        }
+      },
+      invalidatesTags: (_, __, id) => [{ type: 'Adverts', id }],
+    }),
     deleteAdvert: build.mutation({
       query(id) {
         return {
@@ -25,13 +50,17 @@ const adverts = api.injectEndpoints({
           method: "DELETE",
         }
       },
-      invalidatesTags: [{ type: 'Adverts', id: 'LIST' }],
+      invalidatesTags: (_, __, id) => [{ type: 'Adverts', id }],
     }),
   }),
 })
 
 export const {
   useGetUserAdvertsQuery,
+  useGetAdvertByIdQuery,
+  useGetLastAdvertsQuery,
+  useSearchAdvertsQuery,
   useCreateAdvertMutation,
+  useEditAdvertMutation,
   useDeleteAdvertMutation,
 } = adverts

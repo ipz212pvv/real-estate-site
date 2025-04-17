@@ -1,0 +1,11 @@
+ .modal {
+    :global(.ant-modal-close) {
+        background-color: white;
+    }
+ }
+
+ .modal-content {
+     padding-top: 40px !important;
+     background-color: transparent !important;
+     box-shadow: none !important;
+ }

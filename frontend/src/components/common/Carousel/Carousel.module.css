@@ -1,0 +1,23 @@
+.carousel {
+    :global(.slick-prev),
+    :global(.slick-next) {
+        width: 40px;
+        height: 40px;
+        z-index: 1;
+
+        &:hover:not(:global(.slick-disabled)) {
+            opacity: 0.8;
+        }
+
+        &:before {
+            font-size: 40px;
+            opacity: 1;
+            color: #f4801a;
+        }
+    }
+    :global(.slick-arrow.slick-disabled) {
+        &:before {
+            opacity: 0.5;
+        }
+    }
+}

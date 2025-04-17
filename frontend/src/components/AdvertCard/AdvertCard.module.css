@@ -5,6 +5,7 @@
     border: 1px solid rgba(0,0,0,0.1);
     color: initial;
     transition: transform 0.2s;
+    background: white;
 
     &:hover {
         transform: scale(1.02);
@@ -26,26 +27,4 @@
 
 .card-description {
     padding: 8px 8px 16px 8px;
-}
-
-.tooltip-body {
-    min-height: auto !important;
-    padding: 6px 8px;
-    font-size: 14px;
-    line-height: 1;
-}
-
-.like-btn {
-    height: 30px;
-    width: 30px;
-    padding: 0;
-    margin-left: auto;
-
-    &:hover {
-        background: initial !important;
-
-        svg {
-            color: #f4801a;
-        }
-    }
 }
