@@ -1,4 +1,4 @@
-import { Pagination, Space, Typography } from "antd";
+import { Modal, Pagination, Space, Typography } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Marker } from "@maptiler/sdk";
 
@@ -9,6 +9,7 @@ import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
 import { useGetAdvertByIdQuery, useSearchAdvertsQuery } from "@/store/services/adverts.js";
 import { useSearchParams } from "@/hooks/useSearchParams.js";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint.js";
 import styles from "./AdvertsMap.module.css";
 
 function formatSourceFeatures(data) {
@@ -39,6 +40,8 @@ function formatCurrency(number) {
 }
 
 export function AdvertsMap() {
+  const screen = useBreakpoint();
+  const [openModal, setOpenModal] = useState(false);
   const [selectedRealtyId, setSelectedRealtyId] = useState(null);
   const { searchParams, updateSearchParams } = useSearchParams();
 
@@ -73,6 +76,8 @@ export function AdvertsMap() {
 
     activePointId.current = id
     setSelectedRealtyId(id);
+
+    if (!screen.md) setOpenModal(true);
 
     marker.classList.add('property-marker--selected');
 
@@ -133,10 +138,6 @@ export function AdvertsMap() {
 
     createAdvertsMarkers()
 
-    /*mapInstance.on('click', (e) => {
-      console.log(mapInstance.queryRenderedFeatures(e.point))
-    })*/
-
     mapInstance.addLayer({
       id: 'property',
       type: 'circle',
@@ -163,6 +164,30 @@ export function AdvertsMap() {
         "circle-stroke-color": "#F4801A"
       }
     });
+
+    mapInstance.on('click', (e) => {
+      const target = e.originalEvent.target;
+      const isMarkerClick = target?.classList?.contains('property-marker');
+
+      if (!isMarkerClick && activePointId.current !== null) {
+        const features = mapInstance.queryRenderedFeatures(e.point, { layers: ['property'] });
+
+        if (features.length === 0) {
+          const selectedMarker = document.querySelector('.property-marker--selected');
+          selectedMarker?.classList?.remove('property-marker--selected');
+
+          map.current.setFeatureState(
+            { source: 'property', id: activePointId.current },
+            { active: false }
+          );
+
+          activePointId.current = null;
+          setSelectedRealtyId(null);
+
+          if (!screen.md) setOpenModal(false);
+        }
+      }
+    })
 
     mapInstance.on('click', 'property', (e) => {
       const realty = e.features[0];
@@ -211,12 +236,21 @@ export function AdvertsMap() {
   return (
     <Space style={{ width: "100%" }} size="middle" direction="vertical">
       <div style={{ position: "relative" }}>
-        {advert && (
-          <Loading spinning={loadingAdvert}>
+        {selectedRealtyId && !loadingAdvert && (
+          !screen.md ? (
+            <Modal
+              styles={{ content: { paddingTop: 40, backgroundColor: "transparent", boxShadow: "none" } }}
+              open={openModal}
+              loading={loadingAdvert}
+              footer={null}
+            >
+              <AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
+            </Modal>
+          ) : (
             <div className={styles["card-popup"]}>
               <AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
             </div>
-          </Loading>
+          )
         )}
         <Map className={styles.map} style={{ height: 600 }} onLoad={handleMapLoad}/>
       </div>
