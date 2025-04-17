@@ -1,4 +1,9 @@
 .carousel {
+    :global(.slick-track) {
+        margin-left: initial;
+        margin-right: initial;
+    }
+
     :global(.slick-prev),
     :global(.slick-next) {
         width: 40px;

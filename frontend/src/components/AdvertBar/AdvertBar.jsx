@@ -16,6 +16,7 @@ import { arrayToString } from "@/utils/arrayToString.js";
 export function AdvertBar(props) {
   const { like = true, link, advert } = props;
   const {
+    id,
     advertImages,
     price_usd,
     area,
@@ -64,7 +65,7 @@ export function AdvertBar(props) {
               <Flex gap="small" align="center">
                 <Typography.Text strong style={{ fontSize: 24 }}>{price_usd} $</Typography.Text>
                 <Typography.Text>{pricePerMeter} $ за м²</Typography.Text>
-                {like && <AdvertLikeBtn />}
+                {like && <AdvertLikeBtn advertId={id}/>}
               </Flex>
               <Typography.Text strong>{locationDisplay}</Typography.Text>
               {description && (

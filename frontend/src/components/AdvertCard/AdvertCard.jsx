@@ -15,6 +15,7 @@ import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
 export function AdvertCard(props) {
 	const { like = true, link, advert, actionSlot } = props;
 	const {
+		id,
 		advertImages,
 		price_usd,
 		area,
@@ -62,7 +63,7 @@ export function AdvertCard(props) {
 					<Flex gap="small" align="center">
 						<Typography.Text strong style={{ fontSize: 24 }}>{price_usd} $</Typography.Text>
 						<Typography.Text>{pricePerMeter} $ за м²</Typography.Text>
-						{like && <AdvertLikeBtn/>}
+						{like && <AdvertLikeBtn advertId={id}/>}
 					</Flex>
 					<Typography.Text style={{ display: "flex", height: 50 }}>{locationDisplay}</Typography.Text>
 					<Space

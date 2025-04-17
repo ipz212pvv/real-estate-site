@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { NavLink, useLocation } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { Button, Flex, Layout, Menu, Grid, Drawer } from "antd";
 
 import { Container } from "@/components/common/Container.jsx";
 import { FaRegUserCircle } from "react-icons/fa";
-import { FiMenu } from "react-icons/fi";
+import { FiHeart, FiMenu } from "react-icons/fi";
 
 import { matchPathname } from "@/utils/matchPathname.js";
 import styles from "./Header.module.css";
@@ -31,7 +31,7 @@ const NAV_ITEMS = [
     label: "Новобудови",
     path: `/new-buildings?typeId=${ADVERT_TYPES.NEW_BUILDING}`,
     url: "/new-buildings"
-  }
+  },
 ];
 
 export function Header() {
@@ -41,14 +41,7 @@ export function Header() {
   const [activeLink, setActiveLink] = useState(null);
   const user = useSelector(state => state.auth.user);
 
-  useEffect(() => {
-    NAV_ITEMS.forEach(({ url }, i) => {
-      if(matchPathname(url, { strict: true })) {
-        setActiveLink(i);
-      }
-    })
-  }, [location]);
-
+  const activeSavedLink = useMemo(() => matchPathname("/saved", { strict: true }), [location]);
   const selectedKeys = activeLink !== null ? [activeLink.toString()] : [];
 
   const menuItems = useMemo(() => NAV_ITEMS.map(({ label, path }, i) => ({
@@ -64,6 +57,14 @@ export function Header() {
     if (openDrawer) setOpenDrawer(false);
     setActiveLink(e.key)
   };
+
+  useEffect(() => {
+    NAV_ITEMS.forEach(({ url }, i) => {
+      if(matchPathname(url, { strict: true })) {
+        setActiveLink(i);
+      }
+    })
+  }, [location]);
 
   return (
     <Layout.Header className={styles.header}>
@@ -106,14 +107,24 @@ export function Header() {
             </>
           )}
           <Flex gap="small">
-            <Button
-              size="large"
-              type="text"
-              style={{ fontSize: "16px" }}
-              href={user ? "/profile" : "/login"}
-            >
-              <FaRegUserCircle size="20px"/> {user ? "Профіль" : "Увійти"}
-            </Button>
+            <Link to="/saved">
+              <Button
+                size="large"
+                type="text"
+                icon={
+                  <FiHeart
+                    size={24}
+                    color={activeSavedLink ? "var(--ant-orange-6)" : "initial" }
+                    fill={activeSavedLink ? "var(--ant-orange-6)" : "transparent"}
+                  />
+                }
+              />
+            </Link>
+            <Link to={user ? "/profile" : "/login"}>
+              <Button size="large" type="text" style={{ fontSize: "16px" }}>
+                <FaRegUserCircle size="20px"/> {user ? "Профіль" : "Увійти"}
+              </Button>
+            </Link>
           </Flex>
         </Flex>
       </Container>
