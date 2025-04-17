@@ -1,43 +1,20 @@
-import { Modal, Pagination, Space, Typography } from "antd";
+import { Pagination, Space, Typography } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Marker } from "@maptiler/sdk";
 
 import { Map } from "@/components/common/Map.jsx";
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { AdvertList } from "@/components/AdvertList/AdvertList.jsx";
 import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
+import { AdvertModal } from "@/components/AdvertModal/AdvertModal.jsx";
 
 import { useGetAdvertByIdQuery, useSearchAdvertsQuery } from "@/store/services/adverts.js";
 import { useSearchParams } from "@/hooks/useSearchParams.js";
+import { useMapMarkers } from "@/hooks/useMapMarkers.js";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint.js";
+import { formatSourceFeatures } from "@/utils/format.js";
 import styles from "./AdvertsMap.module.css";
 
-function formatSourceFeatures(data) {
-  const features = data.map(({ id, locationForAdvert: { lat, lon } }) => ({
-    id,
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [lon, lat]
-    },
-  }));
-
-  return {
-    'type': 'FeatureCollection',
-    'features': features
-  }
-}
-
-function formatCurrency(number) {
-  return new Intl.NumberFormat("uk-UA",
-    {
-      style: "currency",
-      currency: "USD",
-      currencyDisplay: "narrowSymbol",
-      trailingZeroDisplay: "stripIfInteger",
-    })
-  .format(number);
-}
+const ITEMS_PER_PAGE = 20;
 
 export function AdvertsMap() {
   const screen = useBreakpoint();
@@ -46,14 +23,15 @@ export function AdvertsMap() {
   const { searchParams, updateSearchParams } = useSearchParams();
 
   const map = useRef(null);
-  const markers = useRef([]);
+  const { removeAllMarkers, createMarkers } = useMapMarkers();
   const hoveredPointId = useRef(null);
   const activePointId = useRef(null);
 
   const { data: advertsResponse, isLoading, isFetching } = useSearchAdvertsQuery(
-    { ...searchParams, limit: 20 },
+    { ...searchParams, limit: ITEMS_PER_PAGE },
     { refetchOnMountOrArgChange: true }
   );
+
   const { data: advert, isFetching: loadingAdvert } = useGetAdvertByIdQuery(
     selectedRealtyId,
     { skip: !selectedRealtyId, refetchOnMountOrArgChange: true }
@@ -61,72 +39,79 @@ export function AdvertsMap() {
 
   const { total = 0, adverts = [] } = useMemo(() => advertsResponse || {}, [advertsResponse]);
 
-  const selectRealty = (id) => {
+  const updateFeatureState = (id, states) => {
+    Object.entries(states).forEach(([key, value]) => {
+      map.current.setFeatureState(
+        { source: 'property', id },
+        { [key]: value }
+      );
+    });
+  };
+
+  const selectRealty = (id, coordinates) => {
     const selectedMarker = document.querySelector('.property-marker--selected');
     const marker = document.querySelector(`.property-marker[data-marker-id="${id}"]`);
 
     selectedMarker?.classList?.remove('property-marker--selected');
 
     if(activePointId.current !== null) {
-      map.current.setFeatureState(
-        { source: 'property', id: activePointId.current },
-        { active: false }
-      );
+      updateFeatureState(activePointId.current, { active: false });
     }
 
-    activePointId.current = id
+    activePointId.current = id;
     setSelectedRealtyId(id);
 
     if (!screen.md) setOpenModal(true);
 
     marker.classList.add('property-marker--selected');
+    updateFeatureState(id, { active: true });
 
-    map.current.setFeatureState(
-      { source: 'property', id: activePointId.current },
-      { active: true }
-    );
-  }
-
-  const removeAllMarkers = () => {
-    markers.current.forEach(marker => marker.remove());
-    markers.current = [];
-  }
-
-  const createAdvertsMarkers = () => {
-    adverts.forEach(({ id, locationForAdvert, price_usd }) => {
-      const { lat, lon } = locationForAdvert;
-      const coordinates = [lon, lat];
-      const marker = document.createElement('div');
-
-      marker.className = 'property-marker';
-      marker.textContent = formatCurrency(price_usd);
-      marker.dataset.markerId = id;
-
-      marker.addEventListener('click', () => {
-        selectRealty(id);
-
-        map.current.flyTo({
-          center: coordinates,
-        });
-      })
-
-      const markerInstance = new Marker({ element: marker, anchor: "bottom", offset: [0, -5] })
-        .setLngLat(coordinates)
-        .addTo(map.current);
-
-      markers.current.push(markerInstance);
-    })
-  }
-
-  useEffect(() => {
-    if (map.current) {
-      removeAllMarkers();
-      map.current.getSource("property").setData(formatSourceFeatures(adverts));
-      createAdvertsMarkers()
+    if (coordinates) {
+      map.current.flyTo({ center: coordinates });
     }
-  }, [adverts])
+  };
 
-  if (isLoading) return <Loading />;
+  const handleMapClick = (e) => {
+    const target = e.originalEvent.target;
+    const isMarkerClick = target?.classList?.contains('property-marker');
+
+    if (!isMarkerClick && activePointId.current !== null) {
+      const features = map.current.queryRenderedFeatures(e.point, { layers: ['property'] });
+
+      if (features.length === 0) {
+        const selectedMarker = document.querySelector('.property-marker--selected');
+        selectedMarker?.classList?.remove('property-marker--selected');
+
+        updateFeatureState(activePointId.current, { active: false });
+        activePointId.current = null;
+        setSelectedRealtyId(null);
+
+        if (!screen.md) setOpenModal(false);
+      }
+    }
+  };
+
+  const handlePropertyClick = (e) => {
+    const realty = e.features[0];
+    selectRealty(realty.id, [e.lngLat.lng, e.lngLat.lat]);
+  };
+
+  const handlePropertyHover = (e, isEntering) => {
+    const realty = e.features[0];
+
+    if (hoveredPointId.current !== null) {
+      updateFeatureState(hoveredPointId.current, { hover: false });
+    }
+
+    if (isEntering) {
+      hoveredPointId.current = realty.id;
+      updateFeatureState(hoveredPointId.current, { hover: true });
+      map.current.getCanvas().style.cursor = 'pointer';
+    } else {
+      hoveredPointId.current = null;
+      map.current.getCanvas().style.cursor = '';
+    }
+  };
 
   const handleMapLoad = (mapInstance) => {
     map.current = mapInstance;
@@ -136,7 +121,7 @@ export function AdvertsMap() {
       'data': formatSourceFeatures(adverts)
     });
 
-    createAdvertsMarkers()
+    createMarkers(mapInstance, adverts, selectRealty);
 
     mapInstance.addLayer({
       id: 'property',
@@ -165,88 +150,33 @@ export function AdvertsMap() {
       }
     });
 
-    mapInstance.on('click', (e) => {
-      const target = e.originalEvent.target;
-      const isMarkerClick = target?.classList?.contains('property-marker');
+    mapInstance.on('click', handleMapClick);
+    mapInstance.on('click', 'property', handlePropertyClick);
+    mapInstance.on('mouseenter', 'property', e => handlePropertyHover(e, true));
+    mapInstance.on('mouseleave', 'property', e => handlePropertyHover(e, false));
+  };
 
-      if (!isMarkerClick && activePointId.current !== null) {
-        const features = mapInstance.queryRenderedFeatures(e.point, { layers: ['property'] });
+  useEffect(() => {
+    if (map.current) {
+      removeAllMarkers();
+      map.current.getSource("property").setData(formatSourceFeatures(adverts));
+      createMarkers(map.current, adverts, selectRealty);
+    }
+  }, [adverts]);
 
-        if (features.length === 0) {
-          const selectedMarker = document.querySelector('.property-marker--selected');
-          selectedMarker?.classList?.remove('property-marker--selected');
-
-          map.current.setFeatureState(
-            { source: 'property', id: activePointId.current },
-            { active: false }
-          );
-
-          activePointId.current = null;
-          setSelectedRealtyId(null);
-
-          if (!screen.md) setOpenModal(false);
-        }
-      }
-    })
-
-    mapInstance.on('click', 'property', (e) => {
-      const realty = e.features[0];
-      const realtyId = realty.id;
-
-      selectRealty(realtyId);
-
-      mapInstance.flyTo({
-        center: [e.lngLat.lng, e.lngLat.lat],
-      });
-    });
-
-    mapInstance.on('mouseenter', 'property', (e) => {
-      const realty = e.features[0];
-
-      if (hoveredPointId.current !== null) {
-        mapInstance.setFeatureState(
-          { source: 'property', id: hoveredPointId.current },
-          { hover: false }
-        );
-      }
-
-      hoveredPointId.current = realty.id;
-      mapInstance.setFeatureState(
-        { source: 'property', id: hoveredPointId.current },
-        { hover: true }
-      );
-
-      mapInstance.getCanvas().style.cursor = 'pointer';
-    });
-
-    mapInstance.on('mouseleave', 'property', () => {
-      if (hoveredPointId.current !== null) {
-        mapInstance.setFeatureState(
-          { source: 'property', id: hoveredPointId.current },
-          { hover: false }
-        );
-      }
-
-      hoveredPointId.current = null;
-
-      mapInstance.getCanvas().style.cursor = '';
-    });
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <Space style={{ width: "100%" }} size="middle" direction="vertical">
       <div style={{ position: "relative" }}>
         {selectedRealtyId && !loadingAdvert && (
           !screen.md ? (
-            <Modal
-              styles={{ content: { paddingTop: 40, backgroundColor: "transparent", boxShadow: "none" } }}
+            <AdvertModal
               open={openModal}
-              onCancel={() => setOpenModal(false)}
+              onClose={() => setOpenModal(false)}
               loading={loadingAdvert}
-              footer={null}
-            >
-              <AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
-            </Modal>
+              advert={advert}
+            />
           ) : (
             <div className={styles["card-popup"]}>
               <AdvertCard link={`/adverts/${advert.id}`} advert={advert} />
@@ -264,9 +194,9 @@ export function AdvertsMap() {
         align="center"
         hideOnSinglePage={true}
         defaultCurrent={1}
-        defaultPageSize={20}
+        defaultPageSize={ITEMS_PER_PAGE}
         total={total}
       />
     </Space>
-  )
+  );
 }
