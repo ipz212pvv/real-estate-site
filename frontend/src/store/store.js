@@ -9,7 +9,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['savedAdverts'], // only savedAdverts will be persisted
+  whitelist: ['savedAdverts'],
 };
 
 const rootReducer = combineReducers({
