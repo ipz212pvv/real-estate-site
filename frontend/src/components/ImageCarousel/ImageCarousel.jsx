@@ -15,7 +15,17 @@ export function ImageCarousel({ images = [], imageProps = {}, imageStyle = {}, p
     <Carousel className={styles.carousel} infinite={false} {...props}>
       {images.map((src, i) => (
         <Fragment key={i}>
-          <Image src={src} width="100%" style={{ aspectRatio: "4 / 2.8", ...imageStyle }} {...imageProps}/>
+          <Image
+            src={src}
+            width="100%"
+            style={{
+              aspectRatio: "4 / 2.8",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.1)",
+              ...imageStyle
+            }}
+            {...imageProps}
+          />
         </Fragment>
       ))}
     </Carousel>
