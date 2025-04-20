@@ -8,13 +8,13 @@ import { formatDate } from "@/utils/dateFormat.js";
 export function AdvertSellerCard({ seller, createdAt }) {
   const { userType, image, name, surname } = seller;
 
-  const sellerPhone = `+38${seller.phone}`;
+  const sellerPhone = `+38${seller?.phone}`;
   const createdAtDate = formatDate("DD.MM.YYYY HH:MM", new Date(createdAt))
 
   return (
     <Card
       size="small"
-      title={userType.name}
+      title={userType?.name}
       style={{
         position: "sticky",
         top: 20,
@@ -31,7 +31,7 @@ export function AdvertSellerCard({ seller, createdAt }) {
         />
         <Flex vertical>
           <Typography.Text style={{ fontSize: 16 }} strong ellipsis>{name} {surname}</Typography.Text>
-          <Typography.Text style={{ color: gray[2] }} copyable>{sellerPhone}</Typography.Text>
+          {seller?.phone && <Typography.Text style={{ color: gray[2] }} copyable>{sellerPhone}</Typography.Text>}
         </Flex>
       </Flex>
       <Divider style={{ margin: "8px 0" }} />

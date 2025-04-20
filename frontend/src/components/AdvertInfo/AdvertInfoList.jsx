@@ -51,7 +51,7 @@ export function AdvertInfoList({ advert }) {
 
   const mapOptions = {
     center: [lon, lat],
-    zoom: 16,
+    zoom: 17,
     pitch: 60,
   }
 
