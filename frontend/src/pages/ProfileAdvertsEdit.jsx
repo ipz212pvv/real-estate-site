@@ -3,6 +3,7 @@ import { Card, notification, Typography } from "antd";
 
 import { AdvertForm } from "@/components/AdvertForm/AdvertForm.jsx";
 import { Loading } from "@/components/common/Loading/Loading.jsx";
+import { NotFound } from "@/components/NotFound/NotFound.jsx";
 
 import { useEditAdvertMutation, useGetAdvertByIdQuery } from "@/store/services/adverts.js";
 
@@ -10,7 +11,7 @@ export function ProfileAdvertsEdit() {
 	const navigate = useNavigate();
 	const { id } = useParams();
 
-	const { data, isLoading } = useGetAdvertByIdQuery(id);
+	const { data, isLoading, error } = useGetAdvertByIdQuery(id);
 	const [editAdvert] = useEditAdvertMutation();
 
 	const onFinish = (formData, onFinal) => {
@@ -26,7 +27,8 @@ export function ProfileAdvertsEdit() {
 			.finally(onFinal);
 	};
 
-	if (isLoading) return <Loading/>
+	if (isLoading) return <Loading />
+	if (error) return <NotFound />
 
 	const {
 		title,

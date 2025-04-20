@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { notification, Typography, Upload } from "antd";
+import { notification, Typography, Upload, Image } from "antd";
 import { GoPlus } from "react-icons/go";
 
 import { validateImageFormat, validateImageSize } from "@/utils/imageValidation.js";
@@ -10,6 +10,8 @@ import { useDeleteAdvertImageMutation, useUploadAdvertImageMutation } from "@/st
 
 export function AdvertImages({ initialImages }) {
 	const { id } = useParams();
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewImage, setPreviewImage] = useState('');
 	const [fileList, setFileList] = useState(() => {
 		return initialImages ? initialImages.map(({ id, imageUrl }) => ({
 			uid: id,
@@ -55,6 +57,11 @@ export function AdvertImages({ initialImages }) {
 			.then(() => setFileList(fileList.filter(({ uid: imageId }) => imageId !== uid)))
 	}
 
+	const handlePreview = async (file) => {
+		setPreviewImage(file.url || file.preview);
+		setPreviewOpen(true);
+	};
+
 	useEffect(() => {
 		const error = uploadError || deleteError;
 
@@ -67,19 +74,39 @@ export function AdvertImages({ initialImages }) {
 	}, [uploadError, deleteError]);
 
 	return (
-		<Upload
-			className={styles.upload}
-			accept="image/png, image/jpeg"
-			fileList={fileList}
-			listType="picture-card"
-			customRequest={handleUploadImage}
-			beforeUpload={beforeUpload}
-			onRemove={handleDeleteImage}
-		>
-			<GoPlus size={24} />
-			<Typography.Text style={{ fontSize: 14, marginTop: 4 }}>
-				Додати фото
-			</Typography.Text>
-		</Upload>
+		<>
+			<Upload
+				className={styles.upload}
+				accept="image/png, image/jpeg"
+				fileList={fileList}
+				listType="picture-card"
+				customRequest={handleUploadImage}
+				beforeUpload={beforeUpload}
+				onPreview={handlePreview}
+				onRemove={handleDeleteImage}
+			>
+				<GoPlus size={24} />
+				<Typography.Text style={{ fontSize: 14, marginTop: 4 }}>
+					Додати фото
+				</Typography.Text>
+			</Upload>
+			{previewImage && (
+				<Image
+					wrapperStyle={{ display: 'none' }}
+					src={previewImage}
+					preview={{
+						visible: previewOpen,
+						toolbarRender: (_, { icons: { zoomInIcon, zoomOutIcon } }) => (
+							<div className="ant-image-preview-operations">
+								{zoomOutIcon}
+								{zoomInIcon}
+							</div>
+						),
+						onVisibleChange: (visible) => setPreviewOpen(visible),
+						afterOpenChange: (visible) => !visible && setPreviewImage(''),
+					}}
+				/>
+			)}
+		</>
 	)
 }
