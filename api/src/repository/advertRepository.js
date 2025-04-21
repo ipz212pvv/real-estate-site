@@ -86,20 +86,21 @@ const getAllAdverts = async (where = {}, query = {}) => {
         const { page, limit, offset } = getPaginationParams(query);
         const usePagination = query.page || query.limit;
 
-        const options = {
+        const count = await Advert.count({
             where,
-            include: include,
-            order: [['createdAt', 'DESC']],
-            subQuery: false,
+            include,
             distinct: true
-        };
+        });
 
-        if (usePagination) {
-            options.limit = limit;
-            options.offset = offset;
-        }
+        const rows = await Advert.findAll({
+            where,
+            include,
+            order: [['createdAt', 'DESC']],
+            limit,
+            offset,
+            subQuery: false
+        });
 
-        const { count, rows } = await Advert.findAndCountAll(options);
         await updateAdvertImages(rows);
 
         return {
