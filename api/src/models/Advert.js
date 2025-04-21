@@ -90,6 +90,10 @@ const Advert = sequelize.define('Advert', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+    isHidden: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

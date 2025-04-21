@@ -38,11 +38,10 @@ const updateAdvertImages = async (adverts) => {
     }
 };
 
-const getSearchedAdverts = async (query) => {
+const getSearchedAdverts = async (query, where = {}) => {
     try {
         const { limit,page,propertyTypeId,floor,title,room,typeId, minPriceUah, maxPriceUah, minPriceUsd, maxPriceUsd, city, country,  minArea, maxArea, benefits } = query;
-        let where = {};
-
+        where.isHidden = false;
         if (typeId) where.typeId = typeId;
         if (propertyTypeId) where.propertyTypeId = propertyTypeId;
         if (floor) where.floor = floor;
@@ -126,15 +125,20 @@ const getUserAdverts = async (req) => {
     }
 };
 
-const getAdvertById = async (id) => {
+const getAdvertById = async (id, where = {}) => {
     try {
-        const advert = await Advert.findByPk(id, {
+        const advert = await Advert.findOne({
+            where: {
+                id,
+                ...where
+            },
             include: [...include, getAdvertCommentInclude()],
         });
 
         if (!advert) {
             throw new Error('Оголошення не знайдено');
         }
+
         await updateAdvertImages([advert]);
         return advert;
     } catch (error) {
@@ -187,7 +191,7 @@ const updateAdvertById = async (id, body) => {
             throw new Error('Оголошення не знайдено');
         }
 
-        let {propertyTypeId,typeId, price_uah, price_usd,area,title,description,floor,room } = body;
+        let {propertyTypeId,typeId,isHidden, price_uah, price_usd,area,title,description,floor,room } = body;
         let updateFields = {};
 
         if (price_uah || price_usd) {
@@ -203,6 +207,7 @@ const updateAdvertById = async (id, body) => {
         if (description) updateFields.description = description;
         if (floor) updateFields.floor = floor;
         if (room) updateFields.room = room;
+        if (typeof isHidden !== 'undefined') updateFields.isHidden = isHidden;
 
         return await advert.update(updateFields);
     } catch (error) {

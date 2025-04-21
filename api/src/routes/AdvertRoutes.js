@@ -146,6 +146,59 @@ router.get('/user',authMiddleware,  async (req, res) => {
 
 /**
  * @swagger
+ * /api/adverts/user/{userId}:
+ *   get:
+ *     summary: Retrieve all adverts for a specific user
+ *     description: |
+ *       Fetches a list of adverts created by the specified user.
+ *       - If `page` and `limit` are not provided, all adverts for the user will be returned.
+ *       - If `page` and `limit` are specified, paginated results will be returned.
+ *     tags:
+ *       - adverts
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID of the user
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Page number for pagination (e.g. 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Number of adverts per page (e.g. 10)
+ *     responses:
+ *       200:
+ *         description: List of user's adverts
+ *       400:
+ *         description: Bad request
+ */
+router.get('/user/:userId', async (req, res) => {
+  try {
+    if (!req.params.userId) {
+      return res.status(400).json({ error: 'userId обовʼязковий' });
+    }
+
+    const adverts = await repository.getAllAdverts(
+      { userId: parseInt(req.params.userId), isHidden: false },req.query
+    );
+
+    res.status(200).json(adverts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
+/**
+ * @swagger
  * /api/adverts:
  *   get:
  *     summary: Retrieve all adverts
@@ -176,7 +229,7 @@ router.get('/user',authMiddleware,  async (req, res) => {
  */
 router.get('/', async (req, res) => {
   try {
-    const adverts = await repository.getAllAdverts({}, req.query);
+    const adverts = await repository.getAllAdverts({isHidden:false}, req.query);
     res.status(200).json(adverts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -209,7 +262,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const advert = await repository.getAdvertById(id);
+    const advert = await repository.getAdvertById(id,{isHidden:false});
     res.status(200).json(advert);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -333,6 +386,9 @@ router.post('/', authMiddleware, async (req, res) => {
  *               title:
  *                 type: string
  *                 example: "Updated description of the flat."
+ *               isHidden:
+ *                 type: boolean
+ *                 example: false
  *     responses:
  *       200:
  *         description: Advert updated successfully
