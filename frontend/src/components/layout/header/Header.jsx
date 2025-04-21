@@ -59,6 +59,8 @@ export function Header() {
   };
 
   useEffect(() => {
+    setActiveLink(null);
+
     NAV_ITEMS.forEach(({ url }, i) => {
       if(matchPathname(url, { strict: true })) {
         setActiveLink(i);

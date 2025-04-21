@@ -1,12 +1,13 @@
-import { Card, Divider, Flex, Typography } from "antd";
-import { Image } from "@/components/common/Image.jsx";
+import { Link } from "react-router";
+import { Button, Card, Divider, Flex, Typography } from "antd";
 
-import { AVATAR_FALLBACK } from "@/config/constants.js";
+import { Avatar } from "@/components/common/Avatar.jsx";
+
 import { gray } from "@ant-design/colors";
 import { formatDate } from "@/utils/dateFormat.js";
 
 export function AdvertSellerCard({ seller, createdAt }) {
-  const { userType, image, name, surname } = seller;
+  const { id, userType, image, name, surname } = seller;
 
   const sellerPhone = `+38${seller?.phone}`;
   const createdAtDate = formatDate("DD.MM.YYYY HH:MM", new Date(createdAt))
@@ -22,15 +23,13 @@ export function AdvertSellerCard({ seller, createdAt }) {
       }}
     >
       <Flex gap="middle" align="center">
-        <Image
-          style={{ flex: "0 0 auto", minWidth: 50, borderRadius: "50px" }}
-          width={50}
-          height={50}
-          src={image}
-          fallback={AVATAR_FALLBACK}
-        />
+        <Avatar src={image} size={50} />
         <Flex vertical>
-          <Typography.Text style={{ fontSize: 16 }} strong ellipsis>{name} {surname}</Typography.Text>
+          <Link to={`/accounts/${id}`}>
+            <Button style={{ fontWeight: "bold", padding: 4 }}  type="text">
+              {name} {surname}
+            </Button>
+          </Link>
           {seller?.phone && <Typography.Text style={{ color: gray[2] }} copyable>{sellerPhone}</Typography.Text>}
         </Flex>
       </Flex>
