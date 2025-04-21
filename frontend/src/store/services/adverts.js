@@ -12,6 +12,13 @@ const adverts = api.injectEndpoints({
       query: () => '/adverts/user',
       providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
+    getUserAdvertsById: build.query({
+      query: ({ id, searchParams }) => ({
+        url: `/adverts/user/${id}`,
+        params: searchParams,
+      }) ,
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
+    }),
     getAdvertsByIds: build.query({
       async queryFn(ids, _, __, fetchWithBQ) {
         const requests = [];
@@ -70,6 +77,7 @@ const adverts = api.injectEndpoints({
 
 export const {
   useGetUserAdvertsQuery,
+  useGetUserAdvertsByIdQuery,
   useGetAdvertsByIdsQuery,
   useGetAdvertByIdQuery,
   useGetLastAdvertsQuery,

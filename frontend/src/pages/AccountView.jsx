@@ -17,18 +17,23 @@ import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { NotFound } from "@/components/NotFound/NotFound.jsx";
 
 import { useGetUserByIdQuery } from "@/store/services/users.js";
+import { useGetUserAdvertsByIdQuery } from "@/store/services/adverts.js";
 
 const { Title, Text } = Typography;
 
 export function AccountView() {
 	const { id } = useParams();
-	const { data: user, isLoading, error } = useGetUserByIdQuery(id);
-	const [adverts] = useState([]);
+	const { data: user, isLoading: loadingUser, error: errorUser } = useGetUserByIdQuery(id);
+	const { data: advertsList = [], isLoading: loadingAdverts } = useGetUserAdvertsByIdQuery({
+		id,
+		searchParams: { limit: 12 }
+	});
 
-	if (isLoading) return <Loading/>;
-	if (error) return <NotFound/>;
+	if (loadingUser || loadingAdverts) return <Loading/>;
+	if (errorUser) return <NotFound/>;
 
 	const { name, surname, image, phone, createdAt, userType } = user;
+	const { total, adverts } = advertsList;
 
 	const phoneNumber = `+38${phone}`;
 	const createdAtData = new Date(createdAt).toLocaleDateString();
@@ -56,7 +61,7 @@ export function AccountView() {
 									</Flex>
 									<Flex align="center" gap={8}>
 										<HomeOutlined />
-										<Text>{"0"} об'єктів нерухомості</Text>
+										<Text>{total} об'єктів нерухомості</Text>
 									</Flex>
 								</Flex>
 							</Flex>
