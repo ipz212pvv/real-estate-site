@@ -3,10 +3,9 @@ import { NavLink } from "react-router";
 import { Card, Flex, Menu, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Image } from "@/components/common/Image.jsx";
+import { Avatar } from "@/components/common/Avatar.jsx";
 
 import { logout } from "@/store/slices/authSlice.js";
-import { AVATAR_FALLBACK } from "@/config/constants.js";
 
 const NAV_ITEMS = [
   {
@@ -52,13 +51,7 @@ export function ProfileNavbar() {
     <Flex gap="middle" vertical>
       <Card styles={{ body: { padding: "12px" } }}>
         <Flex gap="middle" align="center">
-          <Image
-            style={{ flex: "0 0 auto", minWidth: 40, borderRadius: "50px" }}
-            width={40}
-            height={40}
-            src={image}
-            fallback={AVATAR_FALLBACK}
-          />
+          <Avatar src={image} size={40} />
           <Flex style={{ overflow: "hidden" }} vertical>
             <Typography.Text ellipsis>{name} {surname}</Typography.Text>
             <Typography.Text style={{ fontSize: "12px" }}>{email}</Typography.Text>

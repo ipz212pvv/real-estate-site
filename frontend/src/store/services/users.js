@@ -4,6 +4,10 @@ import { getUserData } from "@/store/slices/authSlice.js";
 const users = api.injectEndpoints({
   tagTypes: ['Users'],
   endpoints: (build) => ({
+    getUserById: build.query({
+      query: (id) => `/users/${id}`,
+      providesTags: (_, __, id) => [{ type: "Users", id }],
+    }),
     updateUserData: build.mutation({
       async queryFn(newData, { dispatch, getState }, __, fetchBQ) {
         const userId = getState().auth.user.id;
@@ -63,6 +67,7 @@ const users = api.injectEndpoints({
 })
 
 export const {
+  useGetUserByIdQuery,
   useUploadAvatarMutation,
   useDeleteAvatarMutation,
   useUpdateUserDataMutation
