@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Empty, Flex, Typography } from "antd";
 
 import { HeroCards } from "@/components/HeroCards/HeroCards.jsx";
 import { CardCarousel } from "@/components/CardCarousel/CardCarousel.jsx";
@@ -16,7 +16,11 @@ export function Home() {
       <HeroCards />
       <div style={{ paddingTop: "20px" }}>
         <Typography.Title style={{ fontWeight: "bold" }} level={2}>Останні пропозиції</Typography.Title>
-        <CardCarousel items={data?.adverts} />
+        {data?.adverts.length > 0 ? (
+          <CardCarousel items={data?.adverts} />
+        ) : (
+          <Empty description="Оголошення відсутні" />
+        ) }
       </div>
     </Flex>
   )

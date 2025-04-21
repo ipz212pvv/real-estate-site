@@ -1,27 +1,22 @@
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
-import { LuPencil } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuPencil } from "react-icons/lu";
 import { Button, Card, Col, Empty, Flex, notification, Popconfirm, Row, Typography } from "antd";
 
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
-import { useDeleteAdvertMutation, useGetUserAdvertsQuery } from "@/store/services/adverts.js";
+import { useDeleteAdvertMutation, useEditAdvertMutation, useGetUserAdvertsQuery } from "@/store/services/adverts.js";
 
 export function ProfileAdverts() {
   const navigate = useNavigate();
   const { data: advertsResponse, isLoading } = useGetUserAdvertsQuery();
-  const [deleteAdvert] = useDeleteAdvertMutation();
+  const [editAdvert, { error: editError }] = useEditAdvertMutation();
+  const [deleteAdvert, { error: deleteError }] = useDeleteAdvertMutation();
 
   const handleDelete = (id) => {
       deleteAdvert(id)
-      .unwrap()
-      .catch(err => {
-        notification.error({
-          message: "Помилка",
-          description: err.message,
-        })
-      });
   }
 
   const handleEdit = (e, id) => {
@@ -29,6 +24,26 @@ export function ProfileAdverts() {
 
     navigate(`/profile/adverts/${id}/edit`);
   }
+
+  const handleChangeVisibility = (e, id, value) => {
+    e.preventDefault();
+
+    editAdvert({
+      advertId: id,
+      data: { isHidden: value }
+    })
+  }
+
+  useEffect(() => {
+    const error = editError || deleteError;
+
+    if (error) {
+      notification.error({
+        message: "Помилка",
+        description: error.message,
+      });
+    }
+  }, [editError, deleteError]);
 
   if (isLoading) return <Loading />;
 
@@ -55,14 +70,19 @@ export function ProfileAdverts() {
                   like={false}
                   actionSlot={
                     <>
-                      <Button onClick={(e) => handleEdit(e, advert.id)} icon={<LuPencil/>} />
+                      <Button
+                        title={advert.isHidden ? "Показати оголошення" : "Приховати оголошення"}
+                        onClick={(e) => handleChangeVisibility(e, advert.id, !advert.isHidden)}
+                        icon={advert.isHidden ? <LuEye/> : <LuEyeOff />}
+                      />
+                      <Button title="Редагувати" onClick={(e) => handleEdit(e, advert.id)} icon={<LuPencil/>} />
                       <Popconfirm
                         title="Видалити оголошення"
                         description="Ви дійсно бажаєте видалити оголошення?"
                         onPopupClick={(e) => e.preventDefault()}
                         onConfirm={() => handleDelete(advert.id)}
                       >
-                        <Button onClick={(e) => e.preventDefault()} icon={<FaTrash/>} danger/>
+                        <Button title="Видалити" onClick={(e) => e.preventDefault()} icon={<FaTrash/>} danger/>
                       </Popconfirm>
                     </>
                   }

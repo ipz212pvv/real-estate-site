@@ -61,7 +61,7 @@ const adverts = api.injectEndpoints({
           data,
         }
       },
-      invalidatesTags: (_, __, id) => [{ type: 'Adverts', id }],
+      invalidatesTags: (_, __, { advertId }) => [{ type: 'Adverts', id: advertId }],
     }),
     deleteAdvert: build.mutation({
       query(id) {
