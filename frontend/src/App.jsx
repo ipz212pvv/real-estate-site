@@ -14,6 +14,8 @@ import { Rent } from "@/pages/Rent.jsx";
 import { SavedAdverts } from "@/pages/SavedAdverts.jsx";
 import { AdvertDetails } from "@/pages/AdvertDetails.jsx";
 import { AccountView } from "@/pages/AccountView.jsx";
+import { NewBuildings } from "@/pages/NewBuildings.jsx";
+import { NotFound } from "@/components/NotFound/NotFound.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
@@ -21,8 +23,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
-import { NewBuildings } from "@/pages/NewBuildings.jsx";
-import { NotFound } from "@/components/NotFound/NotFound.jsx";
+import { AdminLayout } from "@/components/layout/AdminLayout.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +46,8 @@ function App() {
           <Route path="saved" element={<SavedAdverts />} />
           <Route path="adverts/:id" element={<AdvertDetails />} />
           <Route path="accounts/:id" element={<AccountView />} />
+          <Route path="login" element={<Login />} />
+          <Route path="registration" element={<Registration />} />
           <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
             <Route path="profile" element={<ProfileLayout />}>
               <Route index element={<Profile />} />
@@ -55,9 +58,12 @@ function App() {
               </Route>
             </Route>
           </Route>
-          <Route path="login" element={<Login />} />
-          <Route path="registration" element={<Registration />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route element={<ProtectedRoute roles={[ROLES.ADMIN]}/>}>
+          <Route path="admin" element={<AdminLayout/>}>
+            <Route index element={<div>Admin Page</div>} />
+          </Route>
         </Route>
       </Routes>
     </ErrorBoundary>

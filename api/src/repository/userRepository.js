@@ -30,7 +30,7 @@ const getUser = async (where) => {
         const user = await User.findOne({
             where: {
                 ...where,
-                role: { [Sequelize.Op.ne]: 'admin' },
+                /*role: { [Sequelize.Op.ne]: 'admin' },*/
             },
             attributes: {
                 exclude: ['password'],

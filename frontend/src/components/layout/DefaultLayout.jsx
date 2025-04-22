@@ -1,11 +1,13 @@
 import { Outlet } from "react-router";
-import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
 import { Layout } from "antd";
+
+import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
 import { Container } from "@/components/common/Container.jsx";
 import { Header } from "@/components/layout/header/Header.jsx";
 
+const { Content } = Layout;
+
 export function DefaultLayout() {
-  const { Content } = Layout;
 
   return (
     <Layout>

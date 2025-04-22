@@ -22,9 +22,12 @@ export const loginUser = createAsyncThunk(
 
       localStorage.setItem('token', token);
 
-      await dispatch(getUserData());
+      const userData = await dispatch(getUserData()).unwrap();
 
-      return token;
+      return {
+        token,
+        user: userData,
+      };
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -99,7 +102,7 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.loading = false
-        state.token = payload
+        state.token = payload.token
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.loading = false

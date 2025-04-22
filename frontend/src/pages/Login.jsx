@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 
 import { loginUser } from "@/store/slices/authSlice.js";
+import { ROLES } from "@/config/constants.js";
 
 export function Login() {
   const dispatch = useDispatch();
@@ -13,7 +14,13 @@ export function Login() {
   const onFinish = (userData) => {
     dispatch(loginUser(userData))
       .unwrap()
-      .then(() => navigate("/profile"))
+      .then((res) => {
+        if(res?.user?.role === ROLES.ADMIN) {
+          return navigate("/admin");
+        }
+
+        navigate("/profile")
+      })
       .catch(err => {
         notification.error({
           message: "Помилка",

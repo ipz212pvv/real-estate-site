@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router";
+import { useMemo, useState } from "react";
+import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import { Button, Flex, Layout, Menu, Grid, Drawer } from "antd";
 
@@ -10,6 +10,7 @@ import { FiHeart, FiMenu } from "react-icons/fi";
 import { matchPathname } from "@/utils/matchPathname.js";
 import styles from "./Header.module.css";
 import { ADVERT_TYPES } from "@/config/constants.js";
+import { useMenu } from "@/hooks/useMenu.jsx";
 
 const NAV_ITEMS = [
   {
@@ -36,37 +37,16 @@ const NAV_ITEMS = [
 
 export function Header() {
   const screens = Grid.useBreakpoint();
-  const location = useLocation();
+  const { menuItems, setActiveLink, active } = useMenu(NAV_ITEMS);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [activeLink, setActiveLink] = useState(null);
   const user = useSelector(state => state.auth.user);
 
   const activeSavedLink = useMemo(() => matchPathname("/saved", { strict: true }), [location]);
-  const selectedKeys = activeLink !== null ? [activeLink.toString()] : [];
-
-  const menuItems = useMemo(() => NAV_ITEMS.map(({ label, path }, i) => ({
-    key: i.toString(),
-    label: (
-      <NavLink to={path}>
-        {label}
-      </NavLink>
-    ),
-  })), []);
 
   const handleChangeMenuItem = (e) => {
     if (openDrawer) setOpenDrawer(false);
     setActiveLink(e.key)
   };
-
-  useEffect(() => {
-    setActiveLink(null);
-
-    NAV_ITEMS.forEach(({ url }, i) => {
-      if(matchPathname(url, { strict: true })) {
-        setActiveLink(i);
-      }
-    })
-  }, [location]);
 
   return (
     <Layout.Header className={styles.header}>
@@ -75,7 +55,7 @@ export function Header() {
           {screens.md ? (
             <Menu
               className={styles["menu-desktop"]}
-              selectedKeys={selectedKeys}
+              selectedKeys={active}
               mode="horizontal"
               onClick={handleChangeMenuItem}
               items={menuItems}
@@ -100,7 +80,7 @@ export function Header() {
                 open={openDrawer}
               >
                 <Menu
-                  selectedKeys={selectedKeys}
+                  selectedKeys={active}
                   onClick={handleChangeMenuItem}
                   items={menuItems}
                   style={{ flex: 1, minWidth: 0, border: "none" }}
