@@ -26,6 +26,7 @@ export function AdvertLikeBtn({ advertId }) {
       size="small" 
       type="text"
       onClick={handleToggleSave}
+      title="Зберегти"
     >
       <FiHeart 
         size={24} 

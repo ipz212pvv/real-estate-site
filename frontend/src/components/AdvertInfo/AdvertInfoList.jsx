@@ -8,9 +8,12 @@ import { Map } from "@/components/common/Map.jsx";
 
 import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
 import { arrayToString } from "@/utils/arrayToString.js";
+import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
+import { ReportModal } from "@/components/ReportModal/ReportModal.jsx";
 
 export function AdvertInfoList({ advert }) {
   const {
+    id,
     title,
     price_usd,
     price_uah,
@@ -66,7 +69,13 @@ export function AdvertInfoList({ advert }) {
   return (
     <Space style={{ width: "100%", gap: 0, marginTop: 20 }} split={<Divider/>} direction="vertical">
       <div>
-        <Badge count={typeName} style={{ fontSize: 16, padding: "0 8px", backgroundColor: 'var(--ant-orange-6)' }} />
+        <Flex align="center" justify="space-between">
+          <Badge count={typeName} style={{ fontSize: 16, padding: "0 8px", backgroundColor: 'var(--ant-orange-6)' }} />
+          <Space size="middle">
+            <AdvertLikeBtn advertId={id}/>
+            <ReportModal advertId={id} />
+          </Space>
+        </Flex>
         <Typography.Title level={2}>{title || propertyTypeName}</Typography.Title>
         <Typography.Text style={{ color: "var(--ant-color-text-secondary)" }} >{locationDisplay}</Typography.Text>
       </div>
