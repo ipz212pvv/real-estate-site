@@ -16,14 +16,15 @@ import { AdvertDetails } from "@/pages/AdvertDetails.jsx";
 import { AccountView } from "@/pages/AccountView.jsx";
 import { NewBuildings } from "@/pages/NewBuildings.jsx";
 import { NotFound } from "@/components/NotFound/NotFound.jsx";
+import { AdminAdverts } from "@/pages/AdminAdverts.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
+import { AdminLayout } from "@/components/layout/AdminLayout.jsx";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
 import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
-import { AdminLayout } from "@/components/layout/AdminLayout.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,8 +62,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route element={<ProtectedRoute roles={[ROLES.ADMIN]}/>}>
-          <Route path="admin" element={<AdminLayout/>}>
-            <Route index element={<div>Admin Page</div>} />
+          <Route element={<AdminLayout/>}>
+            <Route path="admin/adverts" element={<AdminAdverts/>} />
           </Route>
         </Route>
       </Routes>

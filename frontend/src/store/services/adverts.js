@@ -4,6 +4,10 @@ import { provideListTagsById } from "@/utils/provideListTagsById.js";
 const adverts = api.injectEndpoints({
   tagTypes: ['Adverts'],
   endpoints: (build) => ({
+    getAdverts: build.query({
+      query: () => '/adverts',
+      providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
+    }),
     getLastAdverts: build.query({
       query: () => '/adverts?limit=10',
       providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
@@ -76,6 +80,7 @@ const adverts = api.injectEndpoints({
 })
 
 export const {
+  useGetAdvertsQuery,
   useGetUserAdvertsQuery,
   useGetUserAdvertsByIdQuery,
   useGetAdvertsByIdsQuery,

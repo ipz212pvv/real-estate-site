@@ -1,3 +1,5 @@
+import { arrayToString } from "@/utils/arrayToString.js";
+
 export function formatCurrency(number) {
 	return new Intl.NumberFormat("uk-UA", {
 		style: "currency",
@@ -21,4 +23,21 @@ export function formatSourceFeatures(data) {
 		'type': 'FeatureCollection',
 		'features': features
 	}
+}
+
+export function formatLocation(location) {
+	const {
+		state,
+		district,
+		city,
+		road,
+		house_number,
+	} = location
+
+	const streetName = road?.replace(new RegExp("(вулиця )|( вулиця)", "g"), "");
+	const streetDisplay = streetName ? `вул. ${streetName}` : "";
+
+	return city
+		? arrayToString([city, streetDisplay, house_number])
+		: arrayToString([state, district])
 }

@@ -5,11 +5,11 @@ import { RiCustomSize } from "react-icons/ri";
 import { PiStairs } from "react-icons/pi";
 
 import { Map } from "@/components/common/Map.jsx";
+import { ReportModal } from "@/components/ReportModal/ReportModal.jsx";
+import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
 
 import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
-import { arrayToString } from "@/utils/arrayToString.js";
-import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
-import { ReportModal } from "@/components/ReportModal/ReportModal.jsx";
+import { formatLocation } from "@/utils/format.js";
 
 export function AdvertInfoList({ advert }) {
   const {
@@ -23,16 +23,7 @@ export function AdvertInfoList({ advert }) {
     description,
     propertyTypeId,
     advertBenefitsForAdvert,
-    locationForAdvert: {
-      state,
-      district,
-      city,
-      road,
-      house_number,
-      building_levels,
-      lat,
-      lon
-    },
+    locationForAdvert,
     advertPropertyTypeForAdvert: {
       name: propertyTypeName,
     },
@@ -41,11 +32,8 @@ export function AdvertInfoList({ advert }) {
     },
   } = advert;
 
-  const streetName = road?.replace(new RegExp("(вулиця )|( вулиця)", "g"), "");
-  const streetDisplay = streetName ? `вул. ${streetName}` : "";
-  const locationDisplay = city
-    ? arrayToString([city, streetDisplay, house_number])
-    : arrayToString([state, district]);
+  const { building_levels, lat, lon } = locationForAdvert;
+  const locationDisplay = formatLocation(locationForAdvert);
 
   const floorLabel = propertyTypeId === ADVERT_PROPERTY_TYPES.HOUSE ? "Кількість поверхів" : "Поверх";
   const floorDisplay = propertyTypeId === ADVERT_PROPERTY_TYPES.FLAT && building_levels ? `${floor} з ${building_levels}` : floor;

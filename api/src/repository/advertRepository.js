@@ -92,14 +92,20 @@ const getAllAdverts = async (where = {}, query = {}) => {
             distinct: true
         });
 
-        const rows = await Advert.findAll({
+        const findOptions = {
             where,
             include,
             order: [['createdAt', 'DESC']],
-            limit,
-            offset,
             subQuery: false
-        });
+        };
+
+        // Only add pagination options if pagination parameters were provided
+        if (usePagination) {
+            findOptions.limit = limit;
+            findOptions.offset = offset;
+        }
+
+        const rows = await Advert.findAll(findOptions);
 
         await updateAdvertImages(rows);
 

@@ -10,8 +10,8 @@ import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
 import { ImageCarousel } from "@/components/ImageCarousel/ImageCarousel.jsx";
 
 import { formatDate } from "@/utils/dateFormat.js";
+import { formatLocation } from "@/utils/format.js";
 import styles from "./AdvertBar.module.css";
-import { arrayToString } from "@/utils/arrayToString.js";
 
 export function AdvertBar(props) {
   const { like = true, link, advert } = props;
@@ -25,25 +25,14 @@ export function AdvertBar(props) {
     propertyTypeId,
     description,
     createdAt,
-    locationForAdvert: {
-      state,
-      district,
-      city,
-      road,
-      house_number,
-      building_levels
-    },
+    locationForAdvert,
     advertPropertyTypeForAdvert: {
       name: propertyTypeName,
     }
   } = advert;
 
-  const streetName = road?.replace(new RegExp("(вулиця )|( вулиця)", "g"), "");
-  const streetDisplay = streetName ? `вул. ${streetName}` : "";
-
-  const locationDisplay = city
-    ? arrayToString([city, streetDisplay, house_number])
-    : arrayToString([state, district])
+  const { building_levels } = locationForAdvert;
+  const locationDisplay = formatLocation(locationForAdvert);
 
   const floorTooltip = propertyTypeId === 2 ? "Кількість поверхів" : "Поверх";
   const floorDisplay = building_levels ? `${floor} з ${building_levels}` : floor;
