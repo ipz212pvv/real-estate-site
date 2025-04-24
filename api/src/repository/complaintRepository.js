@@ -1,11 +1,17 @@
 const {models} = require('../models');
 const { getDecodedTokenFromHeader } = require("../utils/token");
 const { isExistData } = require("../utils/isExist");
+const { getComplaintUserInclude, getComplaintAdvertInclude } = require("../utils/include");
 const {Complaint,Advert } = models;
+
+const include = [
+    getComplaintUserInclude(),
+    getComplaintAdvertInclude()
+];
 
 const getAllComplaints = async () => {
     try {
-        return await Complaint.findAll();
+        return await Complaint.findAll({ include });
     } catch (error) {
         throw new Error('Не вдалося отримати скарги: ' + error.message);
     }
@@ -13,7 +19,7 @@ const getAllComplaints = async () => {
 
 const getComplaintById = async (id) => {
     try {
-        const complaint = await Complaint.findByPk(id);
+        const complaint = await Complaint.findByPk(id, { include });
         if (!complaint) {
             throw new Error('Скаргу не знайдено');
         }

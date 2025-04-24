@@ -59,6 +59,18 @@ const getAdvertImageInclude = () => ({
     as: "advertImages"
 });
 
+const getComplaintUserInclude = () => ({
+    model: models.User,
+    as: "complaintUser",
+    attributes: ["id", "name", "surname"],
+});
+
+const getComplaintAdvertInclude = () => ({
+    model: models.Advert,
+    as: "complaintAdvert",
+    attributes: ["id", "title"],
+});
+
 module.exports = {
     getUserTypeInclude,
     getUserInclude,
@@ -70,5 +82,7 @@ module.exports = {
     getNearbyPlacesInclude,
     getAdvertNearbyPlacesInclude,
     getAdvertCommentInclude,
-    getAdvertPropertyTypeInclude
+    getAdvertPropertyTypeInclude,
+    getComplaintUserInclude,
+    getComplaintAdvertInclude
 };
