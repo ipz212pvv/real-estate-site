@@ -1,9 +1,16 @@
 import { Button, Form, Input, message, Modal, Space } from "antd";
 
-import { useEditAdvertPropertyTypeMutation } from "@/store/services/advert-property-types.js";
+import { 
+  useEditAdvertPropertyTypeMutation,
+  useCreateAdvertPropertyTypeMutation
+} from "@/store/services/advert-property-types.js";
 
 export function EditPropertyTypeModal({ propertyTypeId, form, isModalOpen, setIsModalOpen }) {
   const [editPropertyType, { isLoading: isEditing }] = useEditAdvertPropertyTypeMutation();
+  const [createPropertyType, { isLoading: isCreating }] = useCreateAdvertPropertyTypeMutation();
+
+  const isLoading = isEditing || isCreating;
+  const isNewPropertyType = !propertyTypeId;
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -11,21 +18,31 @@ export function EditPropertyTypeModal({ propertyTypeId, form, isModalOpen, setIs
   };
 
   const handleFormSubmit = (values) => {
-    editPropertyType({
-      propertyTypeId,
-      data: values
-    })
-    .unwrap()
-    .then(() => {
-      message.success('Вид нерухомості успішно оновлений');
-      handleCloseModal();
-    })
-    .catch(error => message.error(error));
+    if (isNewPropertyType) {
+      createPropertyType(values)
+        .unwrap()
+        .then(() => {
+          message.success('Вид нерухомості успішно створений');
+          handleCloseModal();
+        })
+        .catch(error => message.error(error.message));
+    } else {
+      editPropertyType({
+        propertyTypeId,
+        data: values
+      })
+      .unwrap()
+      .then(() => {
+        message.success('Вид нерухомості успішно оновлений');
+        handleCloseModal();
+      })
+      .catch(error => message.error(error.message));
+    }
   };
 
   return (
     <Modal
-      title="Редагування виду нерухомості"
+      title={isNewPropertyType ? "Створення виду нерухомості" : "Редагування виду нерухомості"}
       open={isModalOpen}
       onCancel={handleCloseModal}
       footer={null}
@@ -38,7 +55,7 @@ export function EditPropertyTypeModal({ propertyTypeId, form, isModalOpen, setIs
         <Form.Item
           name="name"
           label="Назва"
-          rules={[{ required: true, message: "Назва обов'зкова" }]}
+          rules={[{ required: true, message: "Назва обов'язкова" }]}
         >
           <Input />
         </Form.Item>
@@ -46,15 +63,15 @@ export function EditPropertyTypeModal({ propertyTypeId, form, isModalOpen, setIs
         <Form.Item
           name="description"
           label="Опис"
-          rules={[{ required: true, message: "Опис обов'зковий" }]}
+          rules={[{ required: true, message: "Опис обов'язковий" }]}
         >
           <Input.TextArea rows={4}/>
         </Form.Item>
 
         <Form.Item>
           <Space>
-            <Button type="primary" htmlType="submit" loading={isEditing}>
-              Зберегти
+            <Button type="primary" htmlType="submit" loading={isLoading}>
+              {isNewPropertyType ? "Створити" : "Зберегти"}
             </Button>
             <Button onClick={handleCloseModal}>
               Скасувати

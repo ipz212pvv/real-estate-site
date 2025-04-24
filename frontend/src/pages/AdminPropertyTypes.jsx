@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { Button, Form, message, Popconfirm, Space, Typography } from "antd";
-import { FaTrash } from "react-icons/fa";
+import { Button, Flex, Form, message, Popconfirm, Space, Typography } from "antd";
+import { FaTrash, FaPlus } from "react-icons/fa";
 import { LuPencil } from "react-icons/lu";
 
 import { DataTable } from "@/components/common/DataTable/DataTable.jsx";
@@ -28,11 +28,16 @@ export function AdminPropertyTypes() {
   };
 
   const handleOpenModal = (data) => {
-    setEditId(data.id);
-    form.setFieldsValue({
-      name: data.name,
-      description: data.description,
-    });
+    if (data) {
+      setEditId(data.id);
+      form.setFieldsValue({
+        name: data.name,
+        description: data.description,
+      });
+    } else {
+      setEditId(null);
+      form.resetFields();
+    }
     setIsModalOpen(true);
   };
 
@@ -84,7 +89,17 @@ export function AdminPropertyTypes() {
 
   return (
     <>
-      <Typography.Title level={3}>Види нерухомості</Typography.Title>
+      <Flex style={{ margin: 16 }} justify="space-between" align="center">
+        <Typography.Title style={{ margin: 0 }} level={3}>Види нерухомості</Typography.Title>
+
+        <Button
+          type="primary"
+          icon={<FaPlus />}
+          onClick={() => handleOpenModal(null)}
+        >
+          Додати вид нерухомості
+        </Button>
+      </Flex>
 
       <DataTable data={types} columns={columns} />
 
