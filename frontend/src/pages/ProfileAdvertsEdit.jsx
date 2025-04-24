@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { Card, notification, Typography } from "antd";
 
 import { AdvertForm } from "@/components/AdvertForm/AdvertForm.jsx";
@@ -10,14 +10,17 @@ import { useEditAdvertMutation, useGetAdvertByIdQuery } from "@/store/services/a
 export function ProfileAdvertsEdit() {
 	const navigate = useNavigate();
 	const { id } = useParams();
+	const [searchParams] = useSearchParams();
 
 	const { data, isLoading, error } = useGetAdvertByIdQuery(id);
 	const [editAdvert] = useEditAdvertMutation();
 
 	const onFinish = (formData, onFinal) => {
+		const redirectTo = searchParams.get("redirectTo");
+
 		editAdvert({ advertId: id, data: formData })
 			.unwrap()
-			.then(() => navigate(`/profile/adverts`))
+			.then(() => navigate(redirectTo || `/profile/adverts`))
 			.catch(err => {
 				notification.error({
 					message: "Помилка",

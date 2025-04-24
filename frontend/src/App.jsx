@@ -18,6 +18,9 @@ import { NewBuildings } from "@/pages/NewBuildings.jsx";
 import { NotFound } from "@/components/NotFound/NotFound.jsx";
 import { AdminAdverts } from "@/pages/AdminAdverts.jsx";
 import { AdminUsers } from "@/pages/AdminUsers.jsx";
+import { AdminPropertyTypes } from "@/pages/AdminPropertyTypes.jsx";
+import { AdminBenefits } from "@/pages/AdminBenefits.jsx";
+import { AdminComplaints } from "@/pages/AdminComplaints.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { AdminLayout } from "@/components/layout/AdminLayout.jsx";
@@ -26,9 +29,6 @@ import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
-import { AdminPropertyTypes } from "@/pages/AdminPropertyTypes.jsx";
-import { AdminBenefits } from "@/pages/AdminBenefits.jsx";
-import { AdminComplaints } from "@/pages/AdminComplaints.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +68,7 @@ function App() {
         <Route element={<ProtectedRoute roles={[ROLES.ADMIN]}/>}>
           <Route element={<AdminLayout/>}>
             <Route path="admin/adverts" element={<AdminAdverts/>} />
+            <Route path="admin/adverts/:id/edit" element={<ProfileAdvertsEdit />} />
             <Route path="admin/users" element={<AdminUsers/>} />
             <Route path="admin/property-types" element={<AdminPropertyTypes/>} />
             <Route path="admin/benefits" element={<AdminBenefits/>} />

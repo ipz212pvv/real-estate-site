@@ -2,7 +2,10 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 import { LuEye, LuPencil } from "react-icons/lu";
 import { FaTrash } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import { FiCheck } from "react-icons/fi";
 import { Typography, Space, Button, Popconfirm, message} from "antd";
+import { green, red } from "@ant-design/colors";
 
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { DataTable } from "@/components/common/DataTable/DataTable.jsx";
@@ -56,6 +59,24 @@ export function AdminAdverts() {
         }
       },
       {
+        accessorKey: 'isHidden',
+        header: "Прихований",
+        enableColumnFilter: false,
+        cell: data => {
+          const { isHidden } = data.row.original;
+
+          return (
+            <div style={{ textAlign: "center" }}>
+              {isHidden ? (
+                <FiCheck color={green[5]} size={24} />
+              ) : (
+                <IoClose color={red[5]} size={24} />
+              )}
+            </div>
+          );
+        }
+      },
+      {
         accessorKey: 'createdAt',
         header: "Створено",
         sortingFn: 'datetime',
@@ -72,7 +93,7 @@ export function AdminAdverts() {
                 icon={<LuEye />}
               />
             </Link>
-            <Link to={`/profile/adverts/${data.row.original.id}/edit`}>
+            <Link to={`/admin/adverts/${data.row.original.id}/edit?redirectTo=/admin/adverts`}>
               <Button
                 title="Редагувати"
                 icon={<LuPencil />}
