@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useMemo, useState } from "react";
 import { Button, Flex, message, Popconfirm, Space, Typography } from "antd";
 import { FaTrash } from "react-icons/fa";
@@ -11,7 +12,7 @@ import {
   useDeleteComplaintMutation,
   useGetComplaintsQuery
 } from "@/store/services/complaints.js";
-import { Link } from "react-router";
+import { formatDate } from "@/utils/dateFormat.js";
 
 export function AdminComplaints() {
   const { data: complaints, isLoading } = useGetComplaintsQuery();
@@ -32,17 +33,6 @@ export function AdminComplaints() {
     setIsModalOpen(true);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('uk-UA', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   const columns = useMemo(
     () => [
       {
@@ -52,14 +42,16 @@ export function AdminComplaints() {
       {
         accessorKey: 'complaintUser',
         header: "Користувач",
+        accessorFn: row => `${row.complaintUser.surname} ${row.complaintUser.name}`,
         cell: data => {
           const { id, name, surname } = data.row.original.complaintUser;
-          return <Link to={`/accounts/${id}`}>{name} {surname}</Link>;
+          return <Link to={`/accounts/${id}`}>{surname} {name}</Link>;
         }
       },
       {
         accessorKey: 'complaintAdvert',
         header: "Оголошення",
+        accessorFn: row => row.complaintAdvert.title,
         cell: data => {
           const { id, title } = data.row.original.complaintAdvert;
           return <Link to={`/adverts/${id}`}>{title}</Link>;
@@ -68,7 +60,8 @@ export function AdminComplaints() {
       {
         accessorKey: 'createdAt',
         header: "Дата",
-        cell: data => formatDate(data.row.original.createdAt)
+        accessorFn: row => new Date(row.createdAt).toLocaleString("uk-UA"),
+        cell: data => formatDate("DD.MM.YYYY HH:MM", new Date(data.row.original.createdAt))
       },
       {
         header: " ",
