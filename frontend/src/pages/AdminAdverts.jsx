@@ -65,7 +65,7 @@ export function AdminAdverts() {
       {
         header: " ",
         cell: data => (
-          <Space size="middle">
+          <Space size="small">
             <Link to={`/adverts/${data.row.original.id}`}>
               <Button
                 title="Переглянути"
@@ -80,7 +80,7 @@ export function AdminAdverts() {
             </Link>
             <Popconfirm
               title="Видалити оголошення"
-              description="Ви дійсно бажаєте видалити оголошення?"
+              description="Ви дійсно бажаєте видалити це оголошення?"
               onConfirm={() => handleDelete(data.row.original.id)}
               disabled={isDeleting}
             >

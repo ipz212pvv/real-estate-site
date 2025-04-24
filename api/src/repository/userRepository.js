@@ -110,6 +110,7 @@ const updateUserById = async (id, userData) => {
 const deleteUserById = async (id) => {
     try {
         const user = await User.findByPk(id);
+
         if (!user) {
             throw new Error('Користувача не знайдено');
         }

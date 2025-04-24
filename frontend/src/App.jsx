@@ -17,6 +17,7 @@ import { AccountView } from "@/pages/AccountView.jsx";
 import { NewBuildings } from "@/pages/NewBuildings.jsx";
 import { NotFound } from "@/components/NotFound/NotFound.jsx";
 import { AdminAdverts } from "@/pages/AdminAdverts.jsx";
+import { AdminUsers } from "@/pages/AdminUsers.jsx";
 import { DefaultLayout } from "@/components/layout/DefaultLayout.jsx";
 import { ProfileLayout } from "@/components/layout/ProfileLayout.jsx";
 import { AdminLayout } from "@/components/layout/AdminLayout.jsx";
@@ -64,6 +65,7 @@ function App() {
         <Route element={<ProtectedRoute roles={[ROLES.ADMIN]}/>}>
           <Route element={<AdminLayout/>}>
             <Route path="admin/adverts" element={<AdminAdverts/>} />
+            <Route path="admin/users" element={<AdminUsers/>} />
           </Route>
         </Route>
       </Routes>

@@ -329,7 +329,8 @@ router.patch('/:id', authMiddleware,checkUserMiddleware, async (req, res) => {
  */
 router.delete('/:id', authMiddleware,checkUserMiddleware, async (req, res) => {
     try {
-        const result = await repository.userRepository.deleteUserById(req.params);
+        const { id } = req.params;
+        const result = await repository.userRepository.deleteUserById(id);
         res.json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });

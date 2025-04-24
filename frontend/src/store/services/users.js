@@ -1,9 +1,14 @@
 import { api } from "@/store/services/api.js";
 import { getUserData } from "@/store/slices/authSlice.js";
+import { provideListTagsById } from "@/utils/provideListTagsById.js";
 
 const users = api.injectEndpoints({
   tagTypes: ['Users'],
   endpoints: (build) => ({
+    getUsers: build.query({
+      query: () => `/users`,
+      providesTags: (result) => provideListTagsById(result || [], "Users"),
+    }),
     getUserById: build.query({
       query: (id) => `/users/${id}`,
       providesTags: (_, __, id) => [{ type: "Users", id }],
@@ -63,12 +68,46 @@ const users = api.injectEndpoints({
         return { data }
       },
     }),
+    editUser: build.mutation({
+      query({ userId, data }) {
+        return {
+          url: `/users/${userId}`,
+          method: "PATCH",
+          data
+        }
+      },
+      invalidatesTags: (_, __, { userId }) => [{ type: 'Users', id: userId }],
+    }),
+    blockUser: build.mutation({
+      query({ userId, block }) {
+        const action = block ? "block" : "unblock";
+
+        return {
+          url: `/users/${userId}/${action}`,
+          method: "PATCH",
+        }
+      },
+      invalidatesTags: (_, __, { userId }) => [{ type: 'Users', id: userId }],
+    }),
+    deleteUser: build.mutation({
+      query(id) {
+        return {
+          url: `/users/${id}`,
+          method: "DELETE",
+        }
+      },
+      invalidatesTags: (_, __, id) => [{ type: 'Users', id }],
+    }),
   }),
 })
 
 export const {
+  useGetUsersQuery,
   useGetUserByIdQuery,
   useUploadAvatarMutation,
   useDeleteAvatarMutation,
-  useUpdateUserDataMutation
+  useUpdateUserDataMutation,
+  useEditUserMutation,
+  useBlockUserMutation,
+  useDeleteUserMutation
 } = users
