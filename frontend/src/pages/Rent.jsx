@@ -3,7 +3,7 @@ import { Flex, Typography } from "antd";
 import { AdvertsFilter } from "@/components/AdvertsFilter/AdvertsFilter.jsx";
 import { AdvertsMap } from "@/components/AdvertsMap/AdvertsMap.jsx";
 
-export function Rent() {
+export default function Rent() {
   return (
     <>
       <Flex justify="space-between">

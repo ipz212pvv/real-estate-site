@@ -14,7 +14,7 @@ import { useGetAdvertsQuery, useDeleteAdvertMutation } from "@/store/services/ad
 import { useGetAdvertPropertyTypesQuery } from "@/store/services/advert-property-types.js";
 import { useGetAdvertTypesQuery } from "@/store/services/advert-types.js";
 
-export function AdminAdverts() {
+export default function AdminAdverts() {
   const { data, isLoading } = useGetAdvertsQuery();
   const { data: propertyTypes = [], isLoading: isLoadingPropertyTypes } = useGetAdvertPropertyTypesQuery();
   const { data: types = [], isLoading: isLoadingTypes } = useGetAdvertTypesQuery();

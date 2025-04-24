@@ -6,7 +6,7 @@ import { UploadAvatar } from "@/components/UploadAvatar/UploadAvatar.jsx";
 
 import { useUpdateUserDataMutation } from "@/store/services/users.js";
 
-export function Profile() {
+export default function Profile() {
   const { name, surname, phone, email } = useSelector((state) => state.auth.user);
   const [updateData] = useUpdateUserDataMutation();
   const lastChangedValue = useRef(null);

@@ -7,7 +7,7 @@ import { NotFound } from "@/components/NotFound/NotFound.jsx";
 
 import { useEditAdvertMutation, useGetAdvertByIdQuery } from "@/store/services/adverts.js";
 
-export function ProfileAdvertsEdit() {
+export default function ProfileAdvertsEdit() {
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const [searchParams] = useSearchParams();

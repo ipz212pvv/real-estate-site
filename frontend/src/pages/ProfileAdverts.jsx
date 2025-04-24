@@ -9,7 +9,7 @@ import { AdvertCard } from "@/components/AdvertCard/AdvertCard.jsx";
 
 import { useDeleteAdvertMutation, useEditAdvertMutation, useGetUserAdvertsQuery } from "@/store/services/adverts.js";
 
-export function ProfileAdverts() {
+export default function ProfileAdverts() {
   const navigate = useNavigate();
   const { data: advertsResponse, isLoading } = useGetUserAdvertsQuery();
   const [editAdvert, { error: editError }] = useEditAdvertMutation();

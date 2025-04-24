@@ -7,7 +7,7 @@ import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { selectSavedAdvertIds } from "@/store/slices/savedAdvertsSlice.js";
 import { useGetAdvertsByIdsQuery } from "@/store/services/adverts.js";
 
-export function SavedAdverts() {
+export default function SavedAdverts() {
   const savedAdvertIds = useSelector(selectSavedAdvertIds);
   const { data: adverts = [], isLoading, isFetching } = useGetAdvertsByIdsQuery(savedAdvertIds);
 

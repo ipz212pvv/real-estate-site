@@ -12,7 +12,7 @@ import {
   useGetBenefitsQuery
 } from "@/store/services/benefits.js";
 
-export function AdminBenefits() {
+export default function AdminBenefits() {
   const { data: benefits, isLoading } = useGetBenefitsQuery();
   const [deleteBenefit, { isLoading: isDeleting }] = useDeleteBenefitMutation();
 

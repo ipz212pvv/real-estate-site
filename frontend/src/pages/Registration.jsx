@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 import { registerUser } from "@/store/slices/authSlice.js";
 import { useGetUserTypesQuery } from "@/store/services/userTypes.js";
 
-export function Registration() {
+export default function Registration() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

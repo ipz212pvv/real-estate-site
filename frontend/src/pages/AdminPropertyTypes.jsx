@@ -12,7 +12,7 @@ import {
   useGetAdvertPropertyTypesQuery
 } from "@/store/services/advert-property-types.js";
 
-export function AdminPropertyTypes() {
+export default function AdminPropertyTypes() {
   const { data: types, isLoading } = useGetAdvertPropertyTypesQuery();
   const [deletePropertyType, { isLoading: isDeleting }] = useDeleteAdvertPropertyTypeMutation();
 

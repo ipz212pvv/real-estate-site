@@ -20,7 +20,7 @@ import { useGetUserAdvertsByIdQuery } from "@/store/services/adverts.js";
 
 const { Title, Text } = Typography;
 
-export function AccountView() {
+export default function AccountView() {
 	const { id } = useParams();
 	const { data: user, isLoading: loadingUser, error: errorUser } = useGetUserByIdQuery(id);
 	const { data: advertsList = [], isLoading: loadingAdverts } = useGetUserAdvertsByIdQuery({

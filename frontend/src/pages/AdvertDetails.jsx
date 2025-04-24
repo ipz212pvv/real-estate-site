@@ -9,7 +9,7 @@ import { AdvertSellerCard } from "@/components/AdvertSellerCard/AdvertSellerCard
 
 import { useGetAdvertByIdQuery } from "@/store/services/adverts.js";
 
-export function AdvertDetails() {
+export default function AdvertDetails() {
   const { id } = useParams();
   const { data: advert, isLoading, error } = useGetAdvertByIdQuery(id);
 

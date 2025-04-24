@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { loginUser } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
 
-export function Login() {
+export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

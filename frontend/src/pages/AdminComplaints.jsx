@@ -14,7 +14,7 @@ import {
 } from "@/store/services/complaints.js";
 import { formatDate } from "@/utils/dateFormat.js";
 
-export function AdminComplaints() {
+export default function AdminComplaints() {
   const { data: complaints, isLoading } = useGetComplaintsQuery();
   const [deleteComplaint, { isLoading: isDeleting }] = useDeleteComplaintMutation();
 

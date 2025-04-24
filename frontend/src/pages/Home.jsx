@@ -6,7 +6,7 @@ import { Loading } from "@/components/common/Loading/Loading.jsx";
 
 import { useGetLastAdvertsQuery } from "@/store/services/adverts.js";
 
-export function Home() {
+export default function Home() {
   const { data, isLoading } = useGetLastAdvertsQuery();
 
   if (isLoading) return <Loading />

@@ -5,7 +5,7 @@ import { AdvertForm } from "@/components/AdvertForm/AdvertForm.jsx";
 
 import { useCreateAdvertMutation } from "@/store/services/adverts.js";
 
-export function ProfileAdvertsCreate() {
+export default function ProfileAdvertsCreate() {
   const navigate = useNavigate();
 
   const [createAdvert] = useCreateAdvertMutation();

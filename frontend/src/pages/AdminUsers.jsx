@@ -18,7 +18,7 @@ import {
 } from "@/store/services/users.js";
 import { useGetUserTypesQuery } from "@/store/services/userTypes.js";
 
-export function AdminUsers() {
+export default function AdminUsers() {
   const { data: users, isLoading } = useGetUsersQuery();
   const { data: types = [], isLoading: isLoadingTypes } = useGetUserTypesQuery();
   const [blockUser, { isLoading: isBlocking }] = useBlockUserMutation();
