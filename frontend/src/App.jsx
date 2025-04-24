@@ -26,6 +26,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute/ProtectedRoute.jsx";
 
 import { getUserData } from "@/store/slices/authSlice.js";
 import { ROLES } from "@/config/constants.js";
+import { AdminPropertyTypes } from "@/pages/AdminPropertyTypes.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ function App() {
           <Route element={<AdminLayout/>}>
             <Route path="admin/adverts" element={<AdminAdverts/>} />
             <Route path="admin/users" element={<AdminUsers/>} />
+            <Route path="admin/property-types" element={<AdminPropertyTypes/>} />
           </Route>
         </Route>
       </Routes>

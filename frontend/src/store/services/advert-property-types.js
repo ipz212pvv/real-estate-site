@@ -8,7 +8,30 @@ const advertPropertyTypes = api.injectEndpoints({
       query: () => '/advert-property-types',
       providesTags: (result) => provideListTagsById(result, "AdvertPropertyTypes"),
     }),
+    editAdvertPropertyType: build.mutation({
+      query({ propertyTypeId, data }) {
+        return {
+          url: `/advert-property-types/${propertyTypeId}`,
+          method: "PATCH",
+          data,
+        }
+      },
+      invalidatesTags: (_, __, { propertyTypeId }) => [{ type: 'AdvertPropertyTypes', id: propertyTypeId }],
+    }),
+    deleteAdvertPropertyType: build.mutation({
+      query(id) {
+        return {
+          url: `/advert-property-types/${id}`,
+          method: "DELETE",
+        }
+      },
+      invalidatesTags: (_, __, id) => [{ type: 'AdvertPropertyTypes', id }],
+    }),
   }),
 })
 
-export const { useGetAdvertPropertyTypesQuery } = advertPropertyTypes
+export const {
+  useGetAdvertPropertyTypesQuery,
+  useEditAdvertPropertyTypeMutation,
+  useDeleteAdvertPropertyTypeMutation,
+} = advertPropertyTypes
