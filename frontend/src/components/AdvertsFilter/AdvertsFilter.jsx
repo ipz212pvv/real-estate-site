@@ -7,11 +7,13 @@ import { NumberRange } from "@/components/common/NumberRange.jsx";
 import { useSearchParams } from "@/hooks/useSearchParams.js";
 import useDebounce from "@/hooks/useDebounce.js";
 import { useGetAdvertPropertyTypesQuery } from "@/store/services/advert-property-types.js";
+import { useGetBenefitsQuery } from "@/store/services/benefits.js";
 
 export function AdvertsFilter() {
   const [open, setOpen] = useState(false);
   const { searchParams, updateSearchParams } = useSearchParams();
-  const { propertyTypeId, minPriceUsd, maxPriceUsd, room, city, minArea, maxArea } = searchParams;
+  const { propertyTypeId, minPriceUsd, maxPriceUsd, room, city, minArea, maxArea, benefits: benefitsParams } = searchParams;
+  const benefitsValue = benefitsParams?.split(",").map(Number);
 
   const setMinPriceUsd = useDebounce(value => updateSearchParams("minPriceUsd", value), 500);
   const setMaxPriceUsd = useDebounce(value => updateSearchParams("maxPriceUsd", value), 500);
@@ -21,13 +23,19 @@ export function AdvertsFilter() {
   const setMaxArea = useDebounce(value => updateSearchParams("maxArea", value), 500);
 
   const { data: propertyTypes = [], isLoading: propertyTypesLoading } = useGetAdvertPropertyTypesQuery();
+  const { data: benefits = [], isLoading: benefitsLoading } = useGetBenefitsQuery();
 
   const propertyTypeOptions = useMemo(() => propertyTypes.map(({ id, name }) => ({
     value: id,
     label: name,
   })), [propertyTypes]);
 
-  if (propertyTypesLoading) return null;
+  const benefitsOptions = useMemo(() => benefits.map(({ id, name }) => ({
+    value: id,
+    label: name,
+  })), [benefits]);
+
+  if (propertyTypesLoading || benefitsLoading) return null;
 
   return (
     <Flex justify="end" style={{ marginBottom: 24 }}>
@@ -89,6 +97,17 @@ export function AdvertsFilter() {
               setMaxValue={setMaxArea}
               fromInputProps={{ suffix: "м²" }}
               toInputProps={{ suffix: "м²" }}
+            />
+          </div>
+          <div>
+            <Typography.Paragraph style={{ marginBottom: 4 }} strong>Переваги</Typography.Paragraph>
+            <Select
+              mode="multiple"
+              style={{ width: "100%" }}
+              defaultValue={benefitsValue}
+              options={benefitsOptions}
+              onChange={value => updateSearchParams("benefits", value)}
+              allowClear
             />
           </div>
         </Space>

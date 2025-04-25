@@ -13,7 +13,7 @@ export function useSearchParams(initialValue) {
       if (Array.isArray(value) ? !value.length : value === null) {
         delete searchParams[key];
       } else {
-        searchParams[key] = Array.isArray(value) ? JSON.stringify(value) : value;
+        searchParams[key] = Array.isArray(value) ? value.join(',') : value;
       }
 
       return searchParams
