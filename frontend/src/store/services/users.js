@@ -78,6 +78,15 @@ const users = api.injectEndpoints({
       },
       invalidatesTags: (_, __, { userId }) => [{ type: 'Users', id: userId }],
     }),
+    changeUserPassword: build.mutation({
+      query(data) {
+        return {
+          url: `/users/change-password`,
+          method: "POST",
+          data
+        }
+      },
+    }),
     blockUser: build.mutation({
       query({ userId, block }) {
         const action = block ? "block" : "unblock";
@@ -109,5 +118,6 @@ export const {
   useUpdateUserDataMutation,
   useEditUserMutation,
   useBlockUserMutation,
-  useDeleteUserMutation
+  useDeleteUserMutation,
+  useChangeUserPasswordMutation,
 } = users

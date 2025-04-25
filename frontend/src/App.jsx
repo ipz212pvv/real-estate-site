@@ -6,6 +6,7 @@ const Home = lazy(() => import("@/pages/Home.jsx"));
 const Login = lazy(() => import("@/pages/Login.jsx"));
 const Registration = lazy(() => import("@/pages/Registration.jsx"));
 const Profile = lazy(() => import("@/pages/Profile.jsx"));
+const ProfileChangePassword = lazy(() => import("@/pages/ProfileChangePassword.jsx"));
 const ProfileAdverts = lazy(() => import("@/pages/ProfileAdverts.jsx"));
 const ProfileAdvertsCreate = lazy(() => import("@/pages/ProfileAdvertsCreate.jsx"));
 const ProfileAdvertsEdit = lazy(() => import("@/pages/ProfileAdvertsEdit.jsx"));
@@ -59,6 +60,7 @@ function App() {
             <Route element={<ProtectedRoute roles={[ROLES.USER]}/>}>
               <Route path="profile" element={<ProfileLayout />}>
                 <Route index element={<Profile />} />
+                <Route path="change-password" element={<ProfileChangePassword />} />
                 <Route path="adverts">
                   <Route index element={<ProfileAdverts />}/>
                   <Route path="create" element={<ProfileAdvertsCreate />}/>

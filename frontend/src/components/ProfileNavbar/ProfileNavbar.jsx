@@ -9,12 +9,16 @@ import { logout } from "@/store/slices/authSlice.js";
 
 const NAV_ITEMS = [
   {
+    label: "Мої оголошення",
+    path: "/profile/adverts",
+  },
+  {
     label: "Персональні дані",
     path: "/profile",
   },
   {
-    label: "Мої оголошення",
-    path: "/profile/adverts",
+    label: "Зміна пароля",
+    path: "/profile/change-password",
   },
 ];
 
