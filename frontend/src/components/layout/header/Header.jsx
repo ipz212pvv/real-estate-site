@@ -102,7 +102,7 @@ export function Header() {
                 }
               />
             </Link>
-            <Link to={user ? "/profile" : "/login"}>
+            <Link to={user ? (user.role === "admin" ? "/admin/adverts" : "/profile") : "/login"}>
               <Button size="large" type="text" style={{ fontSize: "16px" }}>
                 <FaRegUserCircle size="20px"/> {user ? "Профіль" : "Увійти"}
               </Button>

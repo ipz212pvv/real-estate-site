@@ -4,6 +4,8 @@ import { Outlet } from "react-router";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary.jsx";
 
 import { useMenu } from "@/hooks/useMenu.jsx";
+import { logout } from "@/store/slices/authSlice.js";
+import { store } from "@/store/store.js";
 
 const { Content, Sider } = Layout;
 
@@ -27,6 +29,14 @@ const NAV_ITEMS = [
   {
     label: "Скарги",
     path: "/admin/complaints",
+  },
+  {
+    label: (
+      <div onClick={() => store.dispatch(logout({ redirectTo: "/" }))}>
+        Вихід
+      </div>
+    ),
+    danger: true,
   }
 ];
 

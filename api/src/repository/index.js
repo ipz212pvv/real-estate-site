@@ -6,7 +6,6 @@ const locationRepository = require('./locationRepository');
 const nearbyPlacesRepository = require('./nearbyPlacesRepository');
 const complaintRepository = require('./complaintRepository');
 const advertImageRepository = require('./advertImageRepository');
-const likedAdvertisementRepository = require('./likedAdvertisementRepository');
 const advertBenefitsRepository = require('./advertBenefitsRepository');
 const advertNearbyPlacesRepository = require('./advertNearbyPlacesRepository');
 const advertRepository = require('./advertRepository');
@@ -22,7 +21,6 @@ module.exports = {
     nearbyPlacesRepository,
     locationRepository,
     complaintRepository,
-    likedAdvertisementRepository,
     advertBenefitsRepository,
     advertNearbyPlacesRepository,
     advertRepository,

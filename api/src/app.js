@@ -13,7 +13,6 @@ const {
     AdvertImageRoutes,
     ComplaintRoutes,
     LocationRoutes,
-    LikedAdvertisementRoutes,
     AdvertNearbyPlacesRoutes,
     AdvertCommentRoutes,
     AdvertBenefitsRoutes,
@@ -39,7 +38,6 @@ app.use('/api/nearby-places', NearbyPlacesRoutes);
 app.use('/api/adverts', AdvertRoutes);
 app.use('/api/advert-images', AdvertImageRoutes);
 app.use('/api/complaints', ComplaintRoutes);
-app.use('/api/liked-advertisements', LikedAdvertisementRoutes);
 app.use('/api/advert-benefits', AdvertBenefitsRoutes);
 app.use('/api/advert-nearby-places', AdvertNearbyPlacesRoutes);
 app.use('/api/advert-comments', AdvertCommentRoutes);

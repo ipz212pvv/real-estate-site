@@ -8,13 +8,16 @@ export function useMenu(items) {
   const [activeLink, setActiveLink] = useState(null);
   const active = activeLink !== null ? [activeLink.toString()] : [];
 
-  const menuItems = useMemo(() => items.map(({ label, path }, i) => ({
+  const menuItems = useMemo(() => items.map(({ label, path, ...rest }, i) => ({
     key: i.toString(),
     label: (
-      <NavLink to={path}>
-        {label}
-      </NavLink>
+      path ? (
+        <NavLink to={path}>
+          {label}
+        </NavLink>
+      ) : label
     ),
+    ...rest,
   })), [items]);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ const adverts = api.injectEndpoints({
   tagTypes: ['Adverts'],
   endpoints: (build) => ({
     getAdverts: build.query({
-      query: () => '/adverts',
+      query: () => '/adverts/admin',
       providesTags: (result) => provideListTagsById(result?.adverts || [], "Adverts"),
     }),
     getLastAdverts: build.query({

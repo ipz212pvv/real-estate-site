@@ -99,7 +99,6 @@ const getAllAdverts = async (where = {}, query = {}) => {
             subQuery: false
         };
 
-        // Only add pagination options if pagination parameters were provided
         if (usePagination) {
             findOptions.limit = limit;
             findOptions.offset = offset;

@@ -198,6 +198,44 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/adverts/admin:
+ *   get:
+ *     summary: Retrieve all adverts
+ *     description: |
+ *       Fetches a list of all adverts from the database.
+ *       - If `page` and `limit` are not provided, all adverts will be returned.
+ *       - If `page` and `limit` are specified, paginated results will be returned.
+ *     tags:
+ *       - adverts
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Page number for pagination (e.g. 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Number of adverts per page (e.g. 10)
+ *     responses:
+ *       200:
+ *         description: List of adverts
+ *       400:
+ *         description: Bad request
+ */
+router.get('/admin', async (req, res) => {
+  try {
+    const adverts = await repository.getAllAdverts({}, req.query);
+    res.status(200).json(adverts);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 /**
  * @swagger

@@ -9,7 +9,6 @@ const NearbyPlaces = require('./NearbyPlaces');
 const Advert = require('./Advert');
 const AdvertImage = require('./AdvertImage');
 const Complaint = require('./Complaint');
-const LikedAdvertisement = require('./LikedAdvertisement');
 const AdvertBenefits = require('./AdvertBenefits');
 const AdvertNearbyPlaces = require('./AdvertNearbyPlaces');
 const AdvertComment = require('./AdvertComment');
@@ -25,7 +24,6 @@ const models = {
   Advert,
   AdvertImage,
   Complaint,
-  LikedAdvertisement,
   AdvertBenefits,
   AdvertNearbyPlaces,
   AdvertPropertyType,

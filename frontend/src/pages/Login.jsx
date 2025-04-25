@@ -16,7 +16,7 @@ export default function Login() {
       .unwrap()
       .then((res) => {
         if(res?.user?.role === ROLES.ADMIN) {
-          return navigate("/admin");
+          return navigate("/admin/adverts");
         }
 
         navigate("/profile")
