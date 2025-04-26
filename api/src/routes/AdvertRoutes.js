@@ -321,7 +321,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Оголошення не знайдено' });
     }
 
-    if (user && advert.userId !== user.id && advert.isHidden) {
+    if (user && advert.userId !== user.id && advert.isHidden && user.role !== 'admin') {
       return res.status(403).json({ error: 'Оголошення приховано' });
     }
 
