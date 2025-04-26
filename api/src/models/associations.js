@@ -67,21 +67,25 @@ const setupAssociations = (models) => {
     Complaint.belongsTo(User, {
         foreignKey: 'userId',
         as: 'complaintUser',
+        onDelete: 'CASCADE',
     });
 
     User.hasMany(Complaint, {
         foreignKey: 'userId',
         as: 'userComplaints',
+        onDelete: 'CASCADE',
     });
 
     Complaint.belongsTo(Advert, {
         foreignKey: 'advertId',
         as: 'complaintAdvert',
+        onDelete: 'CASCADE',
     });
 
     Advert.hasMany(Complaint, {
         foreignKey: 'advertId',
         as: 'advertComplaints',
+        onDelete: 'CASCADE',
     });
 
     Advert.hasMany(AdvertImage, {
