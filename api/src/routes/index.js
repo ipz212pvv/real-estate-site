@@ -10,7 +10,6 @@ const AdvertImageRoutes = require('./AdvertImageRoutes');
 const ComplaintRoutes = require('./ComplaintRoutes');
 const AdvertBenefitsRoutes = require('./AdvertBenefitsRoutes');
 const AdvertNearbyPlacesRoutes = require('./AdvertNearbyPlacesRoutes');
-const AdvertCommentRoutes = require('./AdvertCommentRoutes');
 const AdvertTypeRoutes = require('./AdvertTypeRoutes');
 const AdvertPropertyTypeRoutes = require('./AdvertPropertyTypeRoutes');
 
@@ -22,7 +21,6 @@ module.exports = {
   AdvertRoutes,
   AdvertImageRoutes,
   NearbyPlacesRoutes,
-  AdvertCommentRoutes,
   ComplaintRoutes,
   AdvertBenefitsRoutes,
   AdvertNearbyPlacesRoutes,

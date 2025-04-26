@@ -14,7 +14,6 @@ const {
     ComplaintRoutes,
     LocationRoutes,
     AdvertNearbyPlacesRoutes,
-    AdvertCommentRoutes,
     AdvertBenefitsRoutes,
     AdvertTypeRoutes,
     AdvertPropertyTypeRoutes
@@ -40,7 +39,6 @@ app.use('/api/advert-images', AdvertImageRoutes);
 app.use('/api/complaints', ComplaintRoutes);
 app.use('/api/advert-benefits', AdvertBenefitsRoutes);
 app.use('/api/advert-nearby-places', AdvertNearbyPlacesRoutes);
-app.use('/api/advert-comments', AdvertCommentRoutes);
 app.use('/api/advert-types', AdvertTypeRoutes);
 app.use('/api/advert-property-types', AdvertPropertyTypeRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));

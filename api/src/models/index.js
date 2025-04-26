@@ -11,7 +11,6 @@ const AdvertImage = require('./AdvertImage');
 const Complaint = require('./Complaint');
 const AdvertBenefits = require('./AdvertBenefits');
 const AdvertNearbyPlaces = require('./AdvertNearbyPlaces');
-const AdvertComment = require('./AdvertComment');
 const AdvertPropertyType = require('./AdvertPropertyType');
 
 const models = {
@@ -27,7 +26,6 @@ const models = {
   AdvertBenefits,
   AdvertNearbyPlaces,
   AdvertPropertyType,
-  AdvertComment
 };
 
 setupAssociations(models);

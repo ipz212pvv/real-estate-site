@@ -2,7 +2,7 @@ const setupAssociations = (models) => {
     const { User, UserType, Location, NearbyPlaces,
         Advert, AdvertType, Complaint, AdvertImage,
          AdvertBenefits, Benefits,
-        AdvertNearbyPlaces, AdvertComment,AdvertPropertyType } = models;
+        AdvertNearbyPlaces,AdvertPropertyType } = models;
 
     User.belongsTo(UserType, {
         foreignKey: 'userTypeId',
@@ -132,36 +132,6 @@ const setupAssociations = (models) => {
     AdvertNearbyPlaces.belongsTo(NearbyPlaces, {
         foreignKey: 'nearbyPlaceId',
         as: 'placeForAdvertNearby',
-    });
-
-    Advert.hasMany(AdvertComment, {
-        foreignKey: 'advertId',
-        as: 'advertComments',
-    });
-
-    AdvertComment.belongsTo(Advert, {
-        foreignKey: 'advertId',
-        as: 'commentForAdvert',
-    });
-
-    User.hasMany(AdvertComment, {
-        foreignKey: 'userId',
-        as: 'userComments',
-    });
-
-    AdvertComment.belongsTo(User, {
-        foreignKey: 'userId',
-        as: 'userForComment',
-    });
-
-    AdvertComment.belongsTo(AdvertComment, {
-        foreignKey: 'parentId',
-        as: 'parentCommentForReply',
-    });
-
-    AdvertComment.hasMany(AdvertComment, {
-        foreignKey: 'parentId',
-        as: 'repliesForComment',
     });
 };
 

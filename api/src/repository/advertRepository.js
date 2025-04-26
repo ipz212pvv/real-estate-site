@@ -2,7 +2,7 @@ const { models } = require('../models');
 const userRepository = require("./userRepository");
 const locationRepository = require("./locationRepository");
 const { Advert ,AdvertType,AdvertPropertyType} = models;
-const { getAdvertCommentInclude,getAdvertPropertyTypeInclude,getUserInclude,getLocationInclude,getAdvertTypeInclude ,getAdvertImageInclude,getAdvertBenefitsInclude, getAdvertNearbyPlacesInclude} = require('./../utils/include');
+const { getAdvertPropertyTypeInclude,getUserInclude,getLocationInclude,getAdvertTypeInclude ,getAdvertImageInclude,getAdvertBenefitsInclude, getAdvertNearbyPlacesInclude} = require('./../utils/include');
 const FileService = require('../services/FileService');
 const {getUsdToUahRate,calculatePrice} = require("../services/RateFetcherService");
 const { Op } = require("sequelize");
@@ -27,13 +27,6 @@ const updateAdvertImages = async (adverts) => {
         }
         if (advert.userOfAdvert && advert.userOfAdvert.image) {
             advert.userOfAdvert.image = await FileService.getUserImage(advert.userOfAdvert.id);
-        }
-        if (advert.advertComments){
-            for (const comment of advert.advertComments) {
-                if (comment.userForComment && comment.userForComment.image) {
-                    comment.userForComment.image = await FileService.getUserImage(comment.userForComment.id);
-                }
-            }
         }
     }
 };
@@ -139,7 +132,7 @@ const getAdvertById = async (id, where = {}) => {
                 id,
                 ...where
             },
-            include: [...include, getAdvertCommentInclude()],
+            include: [...include],
         });
 
         if (!advert) {

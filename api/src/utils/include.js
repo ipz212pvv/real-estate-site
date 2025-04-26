@@ -12,12 +12,6 @@ const getUserInclude = (name) => ({
     include: getUserTypeInclude(),
 });
 
-const getAdvertCommentInclude = () => ({
-    model: models.AdvertComment,
-    as: "advertComments",
-    include: getUserInclude( "userForComment")
-})
-
 const getLocationInclude = (name) => ({
     model: models.Location,
     as: name,
@@ -82,7 +76,6 @@ module.exports = {
     getAdvertImageInclude,
     getNearbyPlacesInclude,
     getAdvertNearbyPlacesInclude,
-    getAdvertCommentInclude,
     getAdvertPropertyTypeInclude,
     getComplaintUserInclude,
     getComplaintAdvertInclude
