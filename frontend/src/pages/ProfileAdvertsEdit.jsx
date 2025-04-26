@@ -47,7 +47,8 @@ export default function ProfileAdvertsEdit() {
 			lon
 		},
 		advertImages,
-		advertBenefitsForAdvert
+		advertBenefitsForAdvert,
+		advertNearbyPlacesForAdvert
 	} = data;
 
 	const initialFormValue = {
@@ -64,7 +65,8 @@ export default function ProfileAdvertsEdit() {
 			lng: lon
 		},
 		images: advertImages,
-		benefits: advertBenefitsForAdvert
+		benefits: advertBenefitsForAdvert,
+		nearbyPlaces: advertNearbyPlacesForAdvert,
 	}
 
 	return (

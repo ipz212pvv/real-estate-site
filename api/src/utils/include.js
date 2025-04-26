@@ -31,6 +31,7 @@ const getBenefitsInclude = (name) => ({
 const getNearbyPlacesInclude = (name) => ({
     model: models.NearbyPlaces,
     as: name,
+    include: getLocationInclude('locationForNearbyPlace'),
 });
 
 const getAdvertTypeInclude = () => ({

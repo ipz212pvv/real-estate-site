@@ -1,5 +1,5 @@
 import { Marker } from "@maptiler/sdk";
-import { Badge, Divider, Flex, Space, Typography } from "antd";
+import { Badge, Button, Divider, Flex, List, Space, Typography } from "antd";
 import { MdOutlineBed } from "react-icons/md";
 import { RiCustomSize } from "react-icons/ri";
 import { PiStairs } from "react-icons/pi";
@@ -9,7 +9,9 @@ import { ReportModal } from "@/components/ReportModal/ReportModal.jsx";
 import { AdvertLikeBtn } from "@/components/AdvertLikeBtn/AdvertLikeBtn.jsx";
 
 import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
-import { formatLocation } from "@/utils/format.js";
+import { formatLocation, formatSecondsToMinutes } from "@/utils/format.js";
+import { DeleteOutlined } from "@ant-design/icons";
+import { gray } from "@ant-design/colors";
 
 export function AdvertInfoList({ advert }) {
   const {
@@ -30,6 +32,7 @@ export function AdvertInfoList({ advert }) {
     advertTypeForAdvert: {
       name: typeName,
     },
+    advertNearbyPlacesForAdvert
   } = advert;
 
   const { building_levels, lat, lon } = locationForAdvert;
@@ -127,6 +130,23 @@ export function AdvertInfoList({ advert }) {
           <Map style={{ height: 400 }} onLoad={handleMapLoad} options={mapOptions} />
         </div>
       </div>
+
+      {advertNearbyPlacesForAdvert.length > 0 && (
+        <div>
+          <Typography.Title level={4}>Місця поблизу</Typography.Title>
+          <List
+            style={{ marginTop: 16 }}
+            size="small"
+            dataSource={advertNearbyPlacesForAdvert}
+            renderItem={({ duration, placeForAdvertNearby: { name } }, i) => (
+              <List.Item>
+                <Typography.Text><span style={{ color: gray[3], marginRight: 8 }}>{i + 1}.</span> {name}</Typography.Text>
+                <Typography.Text style={{ color: gray[3] }}>{formatSecondsToMinutes(duration)}</Typography.Text>
+              </List.Item>
+            )}
+          />
+        </div>
+      )}
     </Space>
   )
 }

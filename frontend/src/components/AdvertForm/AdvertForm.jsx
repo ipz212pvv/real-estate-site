@@ -4,11 +4,12 @@ import { Button, Col, Form, Input, InputNumber, Row, Select } from "antd";
 import { Loading } from "@/components/common/Loading/Loading.jsx";
 import { FormMapLocationSelect } from "@/components/FormMapLocationSelect/FormMapLocationSelect.jsx";
 import { AdvertImages } from "@/components/AdvertImages/AdvertImages.jsx";
+import { NearbyPlacesSelect } from "@/components/NearbyPlacesSelect/NearbyPlacesSelect.jsx";
+import { AdvertBenefitsSelect } from "@/components/AdvertBenefitsSelect/AdvertBenefitsSelect.jsx";
 
 import { useGetAdvertTypesQuery } from "@/store/services/advert-types.js";
 import { useGetAdvertPropertyTypesQuery } from "@/store/services/advert-property-types.js";
 import { ADVERT_PROPERTY_TYPES } from "@/config/constants.js";
-import { AdvertBenefitsSelect } from "@/components/AdvertBenefitsSelect/AdvertBenefitsSelect.jsx";
 import { useGetBenefitsQuery } from "@/store/services/benefits.js";
 
 const suffixSelector = (
@@ -22,6 +23,7 @@ const suffixSelector = (
 
 export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) {
 	const [loading, setLoading] = useState(false);
+	const [markerLocation, setMarkerLocation] = useState(initialFormValue?.location);
 
 	const {
 		data: advertTypes = [],
@@ -57,6 +59,10 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 	})), [benefits]);
 
 	if (advertTypesLoading || advertPropertyTypesLoading || benefitsLoading) return <Loading/>
+
+	const handleChangeMarkerLocation = (location) => {
+		setMarkerLocation(location);
+	}
 
 	const handleFinish = (formData) => {
 		const { priceCurrency, price, location } = formData;
@@ -190,9 +196,19 @@ export function AdvertForm({ onFinish, initialFormValue, submitBtnName, edit }) 
 							{ required: true, message: "Місце знаходження обов'язкове" },
 						]}
 					>
-						<FormMapLocationSelect initialValue={initialValues?.location} />
+						<FormMapLocationSelect initialValue={initialValues?.location} onChangeLocation={handleChangeMarkerLocation} />
 					</Form.Item>
 				</Col>
+				{edit && (
+					<Col span={24}>
+						<Form.Item
+							name="nearbyPlaces"
+							label="Місця поблизу"
+						>
+							<NearbyPlacesSelect initialValue={initialValues?.nearbyPlaces} location={markerLocation} />
+						</Form.Item>
+					</Col>
+				)}
 				<Col span={24}>
 					<Form.Item name="description" label="Опис">
 						<Input.TextArea placeholder="Опис до оголошення..." rows={6}/>

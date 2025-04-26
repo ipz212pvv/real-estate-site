@@ -4,7 +4,7 @@ import "@maptiler/geocoding-control/style.css";
 
 import { Map } from "@/components/common/Map.jsx";
 
-export function FormMapLocationSelect({ initialValue, onChange }) {
+export function FormMapLocationSelect({ initialValue, onChange, onChangeLocation }) {
   const handleMapLoad = (mapInstance) => {
     let marker = null;
 
@@ -37,6 +37,7 @@ export function FormMapLocationSelect({ initialValue, onChange }) {
       addMarker(e.lngLat);
 
       onChange(e.lngLat);
+      onChangeLocation(e.lngLat);
     })
   }
 

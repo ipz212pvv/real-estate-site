@@ -41,3 +41,9 @@ export function formatLocation(location) {
 		? arrayToString([city, streetDisplay, house_number])
 		: arrayToString([state, district])
 }
+
+export function formatSecondsToMinutes(seconds) {
+	const minutes = Math.round((seconds % 3600) / 60);
+
+	return minutes > 0 ? `${minutes} хв` : "менше 1 хв"
+}

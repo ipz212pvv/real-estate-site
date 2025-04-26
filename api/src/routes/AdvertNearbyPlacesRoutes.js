@@ -174,7 +174,7 @@ router.patch('/:id', authMiddleware,roleMiddleware('admin'), async (req, res) =>
  *       400:
  *         description: Bad request
  */
-router.delete('/:id', authMiddleware,roleMiddleware('admin'), async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const result = await advertNearbyPlacesRepository.deleteAdvertNearbyPlaceById(req.params.id);
     res.status(200).json(result);
