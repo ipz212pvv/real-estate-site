@@ -24,7 +24,7 @@ export default function Registration() {
   const onFinish = (userData) => {
     dispatch(registerUser(userData))
     .unwrap()
-    .then(() => navigate("/account"))
+    .then(() => navigate("/profile"))
     .catch(err => {
       notification.error({
         message: "Помилка",
